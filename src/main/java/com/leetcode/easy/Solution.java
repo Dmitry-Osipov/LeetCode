@@ -1,10 +1,18 @@
 package com.leetcode.easy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Solution {
+    // This is help collection for "levelOrder" task
+    private List<List<Integer>> levels = new ArrayList<>();
+    // This is help value for "isValidBST" task
+    private Integer prev;
 
     // Given an array of integers nums and an integer target, return indices of the two numbers such that they add up
     // to target.
@@ -206,5 +214,327 @@ public class Solution {
         }
 
         return String.join(" ", array);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+    //Example:
+    // [3 <- 2 -> 4] <- [1] -> [4 <- 2 -> 3]
+    //Input: root = [1,2,2,3,4,4,3]
+    //Output: true
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        return isMirror(root, root);
+    }
+
+    private boolean isMirror(TreeNode node1, TreeNode node2) {
+        if (node1 == null && node2 == null) {
+            return true;
+        }
+
+        if (node1 == null || node2 == null) {
+            return false;
+        }
+
+        return node1.val == node2.val
+                && isMirror(node1.right, node2.left)
+                && isMirror(node1.left, node2.right);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+    //Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+    //Example1:
+    //Input:
+    //p = [2 <- 1 -> 3], q = [2 <- 1 -> 3]
+    //Output:
+    //true
+    //Example2:
+    //Input:
+    //p = [2 <- 1 -> null], q = [null <- 1 -> 2]
+    //Output:
+    //false
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+
+        if (p == null || q == null) {
+            return false;
+        }
+
+        return p.val == q.val
+                && isSameTree(p.left, q.left)
+                && isSameTree(p.right, q.right);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right,
+    //level by level).
+    //Example:
+    //Input:
+    //[null <- 9 -> null] <- 3 -> [15 <- 20 -> 7]
+    //Output:
+    //[[3], [9,20], [15,7]]
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+
+        helper(root, 0);
+        return levels;
+    }
+
+    private void helper(TreeNode root, int level) {
+        if (levels.size() == level) {
+            levels.add(new ArrayList<>());
+        }
+
+        levels.get(level).add(root.val);
+
+        if (root.left != null) {
+            helper(root.left, level + 1);
+        }
+
+        if (root.right != null) {
+            helper(root.right, level + 1);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    // You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were
+    // swapped by mistake. Recover the tree without changing its structure.
+    // Input:
+    // [2 <- 3 -> 1]
+    // Output:
+    // [2 <- 1 -> 3]
+    public void recoverTree(TreeNode root) {
+        List<Integer> nums = new ArrayList<>();
+        inorder(root, nums);
+        int[] swapped = findTwoSwapped(nums);
+        recover(root, 2, swapped[0], swapped[1]);
+    }
+
+    private void inorder(TreeNode root, List<Integer> nums) {
+        if (root == null) {
+            return;
+        }
+
+        inorder(root.left, nums);
+        nums.add(root.val);
+        inorder(root.right, nums);
+    }
+
+    private int[] findTwoSwapped(List<Integer> nums) {
+        int n = nums.size();
+        int x = -1, y = -1;
+        boolean swappedFirstOccurence = false;
+
+        for (int i = 0; i < n - 1; i++) {
+            if (nums.get(i + 1) < nums.get(i)) {
+                y = nums.get(i + 1);
+                if (!swappedFirstOccurence) {
+                    x = nums.get(i);
+                    swappedFirstOccurence = true;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return new int[] {x, y};
+    }
+
+    private void recover(TreeNode root, int count, int x, int y) {
+        if (root != null) {
+            if (root.val == x || root.val == y) {
+                root.val = root.val == x ? y : x;
+                if (--count == 0) {
+                    return;
+                }
+            }
+            recover(root.left, count, x, y);
+            recover(root.right, count, x, y);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+    //A valid BST is defined as follows:
+    //The left
+    //subtree
+    // of a node contains only nodes with keys less than the node's key.
+    //The right subtree of a node contains only nodes with keys greater than the node's key.
+    //Both the left and right subtrees must also be binary search trees.
+    //Example1:
+    //Input:
+    // [1 <- 2 -> 3]
+    //Output:
+    //true
+    //Example2:
+    //Input:
+    // [1] <- 5 -> [3 <- 4 -> 6]
+    //Output:
+    //false
+    public boolean isValidBST(TreeNode root) {
+        prev = null;
+        return inorder(root);
+    }
+
+    private boolean inorder(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        if (!inorder(root.left)) {
+            return false;
+        }
+        if (prev != null && root.val <= prev) {
+            return false;
+        }
+        prev = root.val;
+        return inorder(root.right);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return the inorder traversal of its nodes' values.
+    //Example:
+    // Input:
+    // null <- 1 -> [3 <- 2 -> null]
+    // Output:
+    // [1, 3, 2]
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        helper(root, result);
+        return result;
+    }
+
+    private void helper(TreeNode root, List<Integer> list) {
+        if (root != null) {
+            helper(root.left, list);
+            list.add(root.val);
+            helper(root.right, list);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer n, return the number of structurally unique BST's (binary search trees) which has exactly n
+    // nodes of unique values from 1 to n.
+    //Example:
+    // [1 -> [2 <- 3]], [1 -> 2 -> 3], [1 <- 2 -> 3], [1 <- 2 <- 3], [[1 -> 2] <- 3]
+    public int numTrees(int n) {
+        int[] G = new int[n + 1];
+        G[0] = 1;
+        G[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                G[i] += G[j - 1] * G[i - j];
+            }
+        }
+
+        return G[n];
+    }
+
+    //Given an integer numRows, return the first numRows of Pascal's triangle.
+    //In Pascal's triangle, each number is the sum of the two numbers directly above it as shown:
+    // Input:
+    // 5
+    // Output:
+    // [[1], [1,1], [1,2,1], [1,3,3,1], [1,4,6,4,1]]
+    public List<List<Integer>> generate(int numRows) {
+        if (numRows == 0) return new ArrayList<>();
+        if (numRows == 1) {
+            List<List<Integer>> result = new ArrayList<>();
+            result.add(Arrays.asList(1));
+            return result;
+        }
+
+        List<List<Integer>> prevRows = generate(numRows - 1);
+        List<Integer> newRow = new ArrayList<>();
+
+        for (int i = 0; i < numRows; i++) {
+            newRow.add(1);
+        }
+
+        for (int i = 1; i < numRows - 1; i++) {
+            newRow.set(i, prevRows.get(numRows - 2).get(i - 1) + prevRows.get(numRows - 2).get(i));
+        }
+
+        prevRows.add(newRow);
+        return prevRows;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+    //You must implement a solution with a linear runtime complexity and use only constant extra space.
+    //Example 1:
+    //Input: nums = [2,2,1]
+    //Output: 1
+    public int singleNumber(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 1) {
+                return entry.getKey();
+            }
+        }
+
+        return -1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer rowIndex, return the rowIndexth (0-indexed) row of the Pascal's triangle.
+    //In Pascal's triangle, each number is the sum of the two numbers directly above it as shown:
+    //Example:
+    //Input:
+    //3
+    //Output:
+    //[1,3,3,1]
+    public List<Integer> getRow(int rowIndex) {
+        return generate(rowIndex + 1).get(rowIndex);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Simple Tree
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String toString() {
+            return "TreeNode{" +
+                    "val=" + val +
+                    ", left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
     }
 }
