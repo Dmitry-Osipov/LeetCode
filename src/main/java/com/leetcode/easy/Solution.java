@@ -3,10 +3,9 @@ package com.leetcode.easy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.regex.PatternSyntaxException;
 
 public class Solution {
     // This is help collection for "levelOrder" task
@@ -451,7 +450,10 @@ public class Solution {
     // Output:
     // [[1], [1,1], [1,2,1], [1,3,3,1], [1,4,6,4,1]]
     public List<List<Integer>> generate(int numRows) {
-        if (numRows == 0) return new ArrayList<>();
+        if (numRows == 0) {
+            return new ArrayList<>();
+        }
+
         if (numRows == 1) {
             List<List<Integer>> result = new ArrayList<>();
             result.add(Arrays.asList(1));
@@ -506,6 +508,107 @@ public class Solution {
     //[1,3,3,1]
     public List<Integer> getRow(int rowIndex) {
         return generate(rowIndex + 1).get(rowIndex);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
+    //'.' Matches any single character.
+    //'*' Matches zero or more of the preceding element.
+    //The matching should cover the entire input string (not partial).
+    //Example 1:
+    //Input: s = "aa", p = "a"
+    //Output: false
+    //Explanation: "a" does not match the entire string "aa".
+    //Example 2:
+    //Input: s = "aa", p = "a*"
+    //Output: true
+    //Explanation: '*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes
+    //"aa".
+    //Example 3:
+    //Input: s = "ab", p = ".*"
+    //Output: true
+    //Explanation: ".*" means "zero or more (*) of any character (.)".
+    public boolean isMatch(String s, String p) {
+        try {
+            return s.matches(p);
+        } catch (PatternSyntaxException e) {
+            return false;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are climbing a staircase. It takes n steps to reach the top.
+    //Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+    //Example 1:
+    //Input: n = 2
+    //Output: 2
+    //Explanation: There are two ways to climb to the top.
+    //1. 1 step + 1 step
+    //2. 2 steps
+    //Example 2:
+    //Input: n = 3
+    //Output: 3
+    //Explanation: There are three ways to climb to the top.
+    //1. 1 step + 1 step + 1 step
+    //2. 1 step + 2 steps
+    //3. 2 steps + 1 step
+    public int climbStairs(int n) {
+        return climbingStairs(0, n);
+    }
+
+    private int climbingStairs(int i, int n) {
+        if (i > n) {
+            return 0;
+        }
+
+        if (i == n) {
+            return 1;
+        }
+
+        return climbingStairs(i + 1, n) + climbingStairs(i + 2, n);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer n, return an array ans of length n + 1 such that for each i (0 <= i <= n), ans[i] is the number
+    // of 1's in the binary representation of i.
+    //Example 1:
+    //Input: n = 2
+    //Output: [0,1,1]
+    //Explanation:
+    //0 --> 0
+    //1 --> 1
+    //2 --> 10
+    //Example 2:
+    //Input: n = 5
+    //Output: [0,1,1,2,1,2]
+    //Explanation:
+    //0 --> 0
+    //1 --> 1
+    //2 --> 10
+    //3 --> 11
+    //4 --> 100
+    //5 --> 101
+    public int[] countBits(int n) {
+        String[] binaryIntegers = new String[n + 1];
+        int[] result = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            binaryIntegers[i] = Integer.toBinaryString(i);
+        }
+
+        for (int i = 0; i < result.length; i++) {
+            int count = 0;
+            for (int j = 0; j < binaryIntegers[i].length(); j++) {
+                if (binaryIntegers[i].charAt(j) == '1') {
+                    count++;
+                }
+            }
+            result[i] = count;
+        }
+
+        return result;
     }
 
     //------------------------------------------------------------------------------------------------------------------

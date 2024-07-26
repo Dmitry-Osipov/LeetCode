@@ -41,6 +41,12 @@ public class SolutionTest {
         singleNumber();
         System.out.println("----------------------------");
         getRow();
+        System.out.println("----------------------------");
+        isMatch();
+        System.out.println("----------------------------");
+        climbStairs();
+        System.out.println("----------------------------");
+        countBits();
     }
 
     public static void twoSum() {
@@ -216,5 +222,24 @@ public class SolutionTest {
     public static void getRow() {
         var solution = new Solution();
         System.out.println(solution.getRow(3));
+    }
+
+    public static void isMatch() {
+        var solution = new Solution();
+        System.out.println(solution.isMatch("aa", "a"));
+        System.out.println(solution.isMatch("aa", "a*"));
+        System.out.println(solution.isMatch("ab", ".*"));
+    }
+
+    public static void climbStairs() {
+        var solution = new Solution();
+        System.out.println(solution.climbStairs(2));
+        System.out.println(solution.climbStairs(3));
+    }
+
+    public static void countBits() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.countBits(2)));
+        System.out.println(Arrays.toString(solution.countBits(5)));
     }
 }
