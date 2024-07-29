@@ -9,9 +9,36 @@ import java.util.regex.PatternSyntaxException;
 
 public class Solution {
     // This is help collection for "levelOrder" task
-    private List<List<Integer>> levels = new ArrayList<>();
+    private final List<List<Integer>> levels = new ArrayList<>();
     // This is help value for "isValidBST" task
     private Integer prev;
+    //Simple Tree
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String toString() {
+            return "TreeNode{" +
+                    "val=" + val +
+                    ", left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     // Given an array of integers nums and an integer target, return indices of the two numbers such that they add up
     // to target.
@@ -190,10 +217,10 @@ public class Solution {
     //Output: 1
     //Explanation: F(2) = F(1) + F(0) = 1 + 0 = 1.
     public int fib(int n) {
-        var sqrt = Math.sqrt(5);
-        var firstOperand = Math.pow((1 + sqrt) / 2, n);
-        var secondOperand = Math.pow((1 - sqrt)/ 2, n);
-        return (int) ((firstOperand - secondOperand) / sqrt);
+        var sqrt5 = Math.sqrt(5);
+        var firstOperand = Math.pow((1 + sqrt5) / 2, n);
+        var secondOperand = Math.pow((1 - sqrt5) / 2, n);
+        return (int) ((firstOperand - secondOperand) / sqrt5);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -333,7 +360,8 @@ public class Solution {
 
     private int[] findTwoSwapped(List<Integer> nums) {
         int n = nums.size();
-        int x = -1, y = -1;
+        int x = -1;
+        int y = -1;
         boolean swappedFirstOccurence = false;
 
         for (int i = 0; i < n - 1; i++) {
@@ -431,16 +459,16 @@ public class Solution {
     //Example:
     // [1 -> [2 <- 3]], [1 -> 2 -> 3], [1 <- 2 -> 3], [1 <- 2 <- 3], [[1 -> 2] <- 3]
     public int numTrees(int n) {
-        int[] G = new int[n + 1];
-        G[0] = 1;
-        G[1] = 1;
+        int[] array = new int[n + 1];
+        array[0] = 1;
+        array[1] = 1;
         for (int i = 2; i <= n; i++) {
             for (int j = 1; j <= i; j++) {
-                G[i] += G[j - 1] * G[i - j];
+                array[i] += array[j - 1] * array[i - j];
             }
         }
 
-        return G[n];
+        return array[n];
     }
 
     //Given an integer numRows, return the first numRows of Pascal's triangle.
@@ -456,7 +484,7 @@ public class Solution {
 
         if (numRows == 1) {
             List<List<Integer>> result = new ArrayList<>();
-            result.add(Arrays.asList(1));
+            result.add(List.of(1));
             return result;
         }
 
@@ -612,32 +640,74 @@ public class Solution {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    //Simple Tree
-    public static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
 
-        TreeNode() {
+    //Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if
+    // needle is not part of haystack.
+    //Example 1:
+    //Input: haystack = "sadbutsad", needle = "sad"
+    //Output: 0
+    //Explanation: "sad" occurs at index 0 and 6.
+    //The first occurrence is at index 0, so we return 0.
+    //Example 2:
+    //Input: haystack = "leetcode", needle = "leeto"
+    //Output: -1
+    //Explanation: "leeto" did not occur in "leetcode", so we return -1.
+    public int strStr(String haystack, String needle) {
+        int haystackLen = haystack.length();
+        int needleLen = needle.length();
+        Map<Character, Integer> offsetTable = new HashMap<>();
+        for (int i = 0; i < needleLen - 1; i++) {
+            offsetTable.put(needle.charAt(i), needleLen - i - 1);
         }
 
-        TreeNode(int val) {
-            this.val = val;
+        int shift = 0;
+        while (shift <= haystackLen - needleLen) {
+            int j = needleLen - 1;
+            while (j >= 0 && needle.charAt(j) == haystack.charAt(shift + j)) {
+                j--;
+            }
+
+            if (j < 0) {
+                return shift;
+            } else {
+                shift += Math.max(1, offsetTable.getOrDefault(haystack.charAt(shift + j), needleLen) - 1);
+            }
         }
 
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
+        return -1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums, find the
+    //subarray
+    // with the largest sum, and return its sum.
+    //Example 1:
+    //Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+    //Output: 6
+    //Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+    //Example 2:
+    //Input: nums = [1]
+    //Output: 1
+    //Explanation: The subarray [1] has the largest sum 1.
+    //Example 3:
+    //Input: nums = [5,4,-1,7,8]
+    //Output: 23
+    //Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
+    public int maxSubArray(int[] nums) {
+        if (Arrays.stream(nums).allMatch(num -> num < 0)) {
+            return Arrays.stream(nums).max().orElse(0);
         }
 
-        @Override
-        public String toString() {
-            return "TreeNode{" +
-                    "val=" + val +
-                    ", left=" + left +
-                    ", right=" + right +
-                    '}';
+        int prevSum = 0;
+        int answer = -1;
+        for (int num : nums) {
+            prevSum = Math.max(prevSum + num, 0);
+            if (prevSum >= answer) {
+                answer = prevSum;
+            }
         }
+
+        return answer;
     }
 }

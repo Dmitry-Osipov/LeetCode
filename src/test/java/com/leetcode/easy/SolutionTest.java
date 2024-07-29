@@ -47,6 +47,10 @@ public class SolutionTest {
         climbStairs();
         System.out.println("----------------------------");
         countBits();
+        System.out.println("----------------------------");
+        strStr();
+        System.out.println("----------------------------");
+        maxSubArray();
     }
 
     public static void twoSum() {
@@ -241,5 +245,20 @@ public class SolutionTest {
         var solution = new Solution();
         System.out.println(Arrays.toString(solution.countBits(2)));
         System.out.println(Arrays.toString(solution.countBits(5)));
+    }
+
+    public static void strStr() {
+        var solution = new Solution();
+        System.out.println(solution.strStr("codecodewars", "ar"));
+        System.out.println(solution.strStr("leeleeettcode", "cde"));
+    }
+
+    public static void maxSubArray() {
+        var solution = new Solution();
+        System.out.println(solution.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+        System.out.println(solution.maxSubArray(new int[]{1}));
+        System.out.println(solution.maxSubArray(new int[]{5, 4, -1, 7, 8}));
+        System.out.println(solution.maxSubArray(new int[]{-1}));
+        System.out.println(solution.maxSubArray(new int[]{-3, -2, -2, -3}));
     }
 }
