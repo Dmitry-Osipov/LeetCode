@@ -2,7 +2,9 @@ package com.leetcode.easy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.PatternSyntaxException;
@@ -709,5 +711,99 @@ public class Solution {
         }
 
         return answer;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such
+    // that adding up all the values along the path equals targetSum.
+    //A leaf is a node with no children.
+    //Example:
+    //Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+    //Output: true
+    //Explanation: 5 + 4 + 11 + 2 = 22
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+
+        Deque<TreeNode> nodeStack = new LinkedList<>();
+        Deque<Integer> sumStack = new LinkedList<>();
+        nodeStack.add(root);
+        sumStack.add(targetSum - root.val);
+
+        TreeNode node;
+        int currentSum;
+        while (!nodeStack.isEmpty()) {
+            node = nodeStack.pollLast();
+            currentSum = sumStack.pollLast();
+            if (node.right == null && node.left == null && currentSum == 0) {
+                return true;
+            }
+
+            if (node.left != null) {
+                nodeStack.add(node.left);
+                sumStack.add(currentSum - node.left.val);
+            }
+
+            if (node.right != null) {
+                nodeStack.add(node.right);
+                sumStack.add(currentSum - node.right.val);
+            }
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a binary tree, find its minimum depth.
+    //The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+    //Note: A leaf is a node with no children.
+    //Example:
+    //Input:
+    // [9] <- [3] -> [15 <- 20 -> 7]
+    //Output:
+    // 3 -> 20 -> 7 будет 2
+    public int minDepth(TreeNode root) {
+        return dfs(root);
+    }
+
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        if (root.left == null) {
+            return 1 + dfs(root.right);
+        }
+
+        if (root.right == null) {
+            return 1 + dfs(root.left);
+        }
+
+        return Math.min(dfs(root.left), dfs(root.right)) + 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    // Given a binary tree, determine if it is height-balanced
+    //Example 1:
+    //Input: root = [3,9,20,null,null,15,7]
+    //Output: true
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        return Math.abs(height(root.left) - height(root.right)) < 2 && isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    private int height(TreeNode root) {
+        if (root == null) {
+            return -1;
+        }
+
+        return 1 + Math.max(height(root.left), height(root.right));
     }
 }

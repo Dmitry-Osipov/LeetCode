@@ -51,6 +51,12 @@ public class SolutionTest {
         strStr();
         System.out.println("----------------------------");
         maxSubArray();
+        System.out.println("----------------------------");
+        hasPathSum();
+        System.out.println("----------------------------");
+        minDepth();
+        System.out.println("----------------------------");
+        isBalanced();
     }
 
     public static void twoSum() {
@@ -260,5 +266,41 @@ public class SolutionTest {
         System.out.println(solution.maxSubArray(new int[]{5, 4, -1, 7, 8}));
         System.out.println(solution.maxSubArray(new int[]{-1}));
         System.out.println(solution.maxSubArray(new int[]{-3, -2, -2, -3}));
+    }
+
+    public static void hasPathSum() {
+        var solution = new Solution();
+        Solution.TreeNode successRoot = new Solution.TreeNode(5,
+                new Solution.TreeNode(4,
+                        new Solution.TreeNode(11,
+                                new Solution.TreeNode(7), new Solution.TreeNode(2)), null),
+                new Solution.TreeNode(8,
+                        new Solution.TreeNode(13), new Solution.TreeNode(4,
+                        null, new Solution.TreeNode(1))));
+        System.out.println(solution.hasPathSum(successRoot, 22));
+
+        Solution.TreeNode failureRoot =
+                new Solution.TreeNode(1, new Solution.TreeNode(2), new Solution.TreeNode(3));
+        System.out.println(solution.hasPathSum(failureRoot, 5));
+    }
+
+    public static void minDepth() {
+        var solution = new Solution();
+        Solution.TreeNode root = new Solution.TreeNode(5,
+                new Solution.TreeNode(4,
+                        new Solution.TreeNode(11,
+                                new Solution.TreeNode(7), new Solution.TreeNode(2)), null),
+                new Solution.TreeNode(8,
+                        new Solution.TreeNode(13), new Solution.TreeNode(4,
+                        null, new Solution.TreeNode(1))));
+        System.out.println(solution.minDepth(root));
+    }
+
+    public static void isBalanced() {
+        var solution = new Solution();
+        Solution.TreeNode root = new Solution.TreeNode(3,
+                new Solution.TreeNode(3), new Solution.TreeNode(20,
+                new Solution.TreeNode(20), new Solution.TreeNode(7)));
+        System.out.println(solution.isBalanced(root));
     }
 }
