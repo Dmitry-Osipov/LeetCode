@@ -2,12 +2,15 @@ package com.leetcode.easy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Stream;
 
 public class Solution {
     // This is help collection for "levelOrder" task
@@ -833,5 +836,102 @@ public class Solution {
         }
 
         return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //A distinct string is a string that is present only once in an array.
+    //Given an array of strings arr, and an integer k, return the kth distinct string present in arr. If there are
+    //fewer than k distinct strings, return an empty string "".
+    //Note that the strings are considered in the order in which they appear in the array.
+    //Example 1:
+    //Input: arr = ["d","b","c","b","c","a"], k = 2
+    //Output: "a"
+    //Explanation:
+    //The only distinct strings in arr are "d" and "a".
+    //"d" appears 1st, so it is the 1st distinct string.
+    //"a" appears 2nd, so it is the 2nd distinct string.
+    //Since k == 2, "a" is returned.
+    //Example 2:
+    //Input: arr = ["aaa","aa","a"], k = 1
+    //Output: "aaa"
+    //Explanation:
+    //All strings in arr are distinct, so the 1st string "aaa" is returned.
+    //Example 3:
+    //Input: arr = ["a","b","a"], k = 3
+    //Output: ""
+    //Explanation:
+    //The only distinct string is "b". Since there are fewer than 3 distinct strings, we return an empty string "".
+    public String kthDistinct(String[] arr, int k) {
+        Map<String, Integer> map = new LinkedHashMap<>();
+        for (String s : arr) {
+            map.put(s, map.getOrDefault(s, 0) + 1);
+        }
+
+        String[] distinct = map.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .toArray(String[]::new);
+
+        return Arrays.stream(distinct)
+                .skip(k - 1L)
+                .limit(1)
+                .findFirst()
+                .orElse("");
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+    //The overall run time complexity should be O(log (m+n)).
+    //Example 1:
+    //Input: nums1 = [1,3], nums2 = [2]
+    //Output: 2.00000
+    //Explanation: merged array = [1,2,3] and median is 2.
+    //Example 2:
+    //Input: nums1 = [1,2], nums2 = [3,4]
+    //Output: 2.50000
+    //Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        var firstOperand = Arrays.stream(nums1)
+                .average()
+                .orElse(0);
+        var secondOperand = Arrays.stream(nums2)
+                .average()
+                .orElse(0);
+        return (firstOperand + secondOperand) / 2.0;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+    //An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using
+    //all the original letters exactly once.
+    //Example 1:
+    //Input: strs = ["eat","tea","tan","ate","nat","bat"]
+    //Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+    //Example 2:
+    //Input: strs = [""]
+    //Output: [[""]]
+    //Example 3:
+    //Input: strs = ["a"]
+    //Output: [["a"]]
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String word : strs) {
+            char[] chars = word.toCharArray();
+            Arrays.sort(chars);
+            String sortedWord = new String(chars);
+
+            if (!map.containsKey(sortedWord)) {
+                map.put(sortedWord, new ArrayList<>());
+            }
+
+            map.get(sortedWord).add(word);
+        }
+
+        return new ArrayList<>(map.values());
     }
 }

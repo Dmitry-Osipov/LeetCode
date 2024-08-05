@@ -59,6 +59,12 @@ public class SolutionTest {
         isBalanced();
         System.out.println("----------------------------");
         topKFrequent();
+        System.out.println("----------------------------");
+        kthDistinct();
+        System.out.println("----------------------------");
+        findMedianSortedArrays();
+        System.out.println("----------------------------");
+        groupAnagrams();
     }
 
     public static void twoSum() {
@@ -311,5 +317,28 @@ public class SolutionTest {
         System.out.println(Arrays.toString(solution.topKFrequent(new int[]{1, 1, 1, 2, 2, 3}, 2)));
         System.out.println(Arrays.toString(solution.topKFrequent(new int[]{1}, 1)));
         System.out.println(Arrays.toString(solution.topKFrequent(new int[]{-1, -1}, 1)));
+    }
+
+    public static void kthDistinct() {
+        var solution = new Solution();
+        System.out.println(solution.kthDistinct(new String[]{"d", "b", "c", "b", "c", "a"}, 2));
+        System.out.println(solution.kthDistinct(new String[]{"aaa", "aa", "a"}, 1));
+        System.out.println(solution.kthDistinct(new String[]{"a", "b", "a"}, 3));
+    }
+
+    public static void findMedianSortedArrays() {
+        var solution = new Solution();
+        System.out.println(solution.findMedianSortedArrays(new int[]{1, 3}, new int[]{2}));
+        System.out.println(solution.findMedianSortedArrays(new int[]{1, 2}, new int[]{3, 4}));
+        System.out.println(solution.findMedianSortedArrays(new int[1], new int[0]));
+        System.out.println(solution.findMedianSortedArrays(new int[]{1, 3}, new int[]{2, 7}));
+        System.out.println(solution.findMedianSortedArrays(new int[0], new int[]{1}));
+    }
+
+    public static void groupAnagrams() {
+        var solution = new Solution();
+        System.out.println(solution.groupAnagrams(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
+        System.out.println(solution.groupAnagrams(new String[]{"a"}));
+        System.out.println(solution.groupAnagrams(new String[]{""}));
     }
 }
