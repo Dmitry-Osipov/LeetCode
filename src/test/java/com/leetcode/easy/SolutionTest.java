@@ -57,6 +57,8 @@ public class SolutionTest {
         minDepth();
         System.out.println("----------------------------");
         isBalanced();
+        System.out.println("----------------------------");
+        topKFrequent();
     }
 
     public static void twoSum() {
@@ -302,5 +304,12 @@ public class SolutionTest {
                 new Solution.TreeNode(3), new Solution.TreeNode(20,
                 new Solution.TreeNode(20), new Solution.TreeNode(7)));
         System.out.println(solution.isBalanced(root));
+    }
+
+    public static void topKFrequent() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.topKFrequent(new int[]{1, 1, 1, 2, 2, 3}, 2)));
+        System.out.println(Arrays.toString(solution.topKFrequent(new int[]{1}, 1)));
+        System.out.println(Arrays.toString(solution.topKFrequent(new int[]{-1, -1}, 1)));
     }
 }
