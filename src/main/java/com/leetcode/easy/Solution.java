@@ -2,7 +2,6 @@ package com.leetcode.easy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.PatternSyntaxException;
-import java.util.stream.Stream;
 
 public class Solution {
     // This is help collection for "levelOrder" task
@@ -924,11 +922,7 @@ public class Solution {
             char[] chars = word.toCharArray();
             Arrays.sort(chars);
             String sortedWord = new String(chars);
-
-            if (!map.containsKey(sortedWord)) {
-                map.put(sortedWord, new ArrayList<>());
-            }
-
+            map.computeIfAbsent(sortedWord, k -> new ArrayList<>());
             map.get(sortedWord).add(word);
         }
 
