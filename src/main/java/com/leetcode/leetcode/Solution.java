@@ -8,8 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.IntPredicate;
+import java.util.function.IntSupplier;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.IntStream;
 
 public class Solution {
     // This is help collection for "levelOrder" task
@@ -1063,5 +1064,73 @@ public class Solution {
         }
 
         return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given two strings s and t, return true if s is a subsequence of t, or false otherwise.
+    //A subsequence of a string is a new string that is formed from the original string by deleting some (can be none)
+    // of the characters without disturbing the relative positions of the remaining characters. (i.e., "ace" is a
+    // subsequence of "abcde" while "aec" is not).
+    //Example 1:
+    //Input: s = "abc", t = "ahbgdc"
+    //Output: true
+    //Example 2:
+    //Input: s = "axc", t = "ahbgdc"
+    //Output: false
+    public boolean isSubsequence(String s, String t) {
+        int sLength = s.length();
+        int i = 0;
+        for (int j = 0; j < t.length(); j++) {
+            if (i == sLength) {
+                return true;
+            }
+
+            if (t.charAt(j) == s.charAt(i)) {
+                i++;
+            }
+        }
+
+        return i == sLength;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //The Tribonacci sequence Tn is defined as follows:
+    //T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+    //Given n, return the value of Tn.
+    //Example 1:
+    //Input: n = 4
+    //Output: 4
+    //Explanation:
+    //T_3 = 0 + 1 + 1 = 2
+    //T_4 = 1 + 1 + 2 = 4
+    //Example 2:
+    //Input: n = 25
+    //Output: 1389537
+    public int tribonacci(int n) {
+        if (n < 1) {
+            return 0;
+        }
+
+        return generateTribonacci().skip(n - 1L).limit(1L).sum();
+    }
+
+    private IntStream generateTribonacci() {
+        return IntStream.generate(new IntSupplier() {
+            int a = 1;
+            int b = 1;
+            int c = 2;
+
+            @Override
+            public int getAsInt() {
+                int x = a;
+                int temp = a + b + c;
+                a = b;
+                b = c;
+                c = temp;
+                return x;
+            }
+        });
     }
 }

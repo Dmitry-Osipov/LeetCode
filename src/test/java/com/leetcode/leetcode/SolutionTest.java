@@ -70,6 +70,10 @@ public class SolutionTest {
         System.out.println("----------------------------");
         areNumbersAscending();
         System.out.println("----------------------------");
+        isSubsequence();
+        System.out.println("----------------------------");
+        tribonacci();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -364,5 +368,21 @@ public class SolutionTest {
         System.out.println(solution.areNumbersAscending("1 box has 3 blue 4 red 6 green and 12 yellow marbles"));
         System.out.println(solution.areNumbersAscending("hello world 5 x 5"));
         System.out.println(solution.areNumbersAscending("sunset is at 7 51 pm overnight lows will be in the low 50 and 60 s"));
+    }
+
+    public static void isSubsequence() {
+        var solution = new Solution();
+        System.out.println(solution.isSubsequence("abc", "ahbgdc"));
+        System.out.println(solution.isSubsequence("axc", "ahbgdc"));
+        System.out.println(solution.isSubsequence("acb", "ahbgdc"));
+    }
+
+    public static void tribonacci() {
+        var solution = new Solution();
+        System.out.println(solution.tribonacci(1));
+        System.out.println(solution.tribonacci(2));
+        System.out.println(solution.tribonacci(3));
+        System.out.println(solution.tribonacci(4));
+        System.out.println(solution.tribonacci(25));
     }
 }
