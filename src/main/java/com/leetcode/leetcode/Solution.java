@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntPredicate;
 import java.util.regex.PatternSyntaxException;
 
 public class Solution {
@@ -927,5 +928,140 @@ public class Solution {
         }
 
         return new ArrayList<>(map.values());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+    //The algorithm for myAtoi(string s) is as follows:
+    //Whitespace: Ignore any leading whitespace (" ").
+    //Signedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity is neither
+    // present.
+    //Conversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of
+    // the string is reached. If no digits were read, then the result is 0.
+    //Rounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to
+    // remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater
+    // than 231 - 1 should be rounded to 231 - 1.
+    //Return the integer as the final result.
+    //Example 1:
+    //Input: s = "42"
+    //Output: 42
+    //Explanation:
+    //The underlined characters are what is read in and the caret is the current reader position.
+    //Step 1: "42" (no characters read because there is no leading whitespace)
+    //         ^
+    //Step 2: "42" (no characters read because there is neither a '-' nor '+')
+    //         ^
+    //Step 3: "42" ("42" is read in)
+    //           ^
+    //
+    //Example 2:
+    //Input: s = " -042"
+    //Output: -42
+    //Explanation:
+    //
+    //Step 1: "   -042" (leading whitespace is read and ignored)
+    //            ^
+    //Step 2: "   -042" ('-' is read, so the result should be negative)
+    //             ^
+    //Step 3: "   -042" ("042" is read in, leading zeros ignored in the result)
+    //               ^
+    //Example 3:
+    //Input: s = "1337c0d3"
+    //Output: 1337
+    //Explanation:
+    //Step 1: "1337c0d3" (no characters read because there is no leading whitespace)
+    //         ^
+    //Step 2: "1337c0d3" (no characters read because there is neither a '-' nor '+')
+    //         ^
+    //Step 3: "1337c0d3" ("1337" is read in; reading stops because the next character is a non-digit)
+    //             ^
+    //Example 4:
+    //Input: s = "0-1"
+    //Output: 0
+    //Explanation:
+    //Step 1: "0-1" (no characters read because there is no leading whitespace)
+    //         ^
+    //Step 2: "0-1" (no characters read because there is neither a '-' nor '+')
+    //         ^
+    //Step 3: "0-1" ("0" is read in; reading stops because the next character is a non-digit)
+    //          ^
+    //Example 5:
+    //Input: s = "words and 987"
+    //Output: 0
+    //Explanation:
+    //Reading stops at the first non-digit character 'w'.
+    public int myAtoi(String s) {
+        s = s.trim();
+        var sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.isDigit(s.charAt(i)) || (isSign(s.charAt(i)) && i == 0)) {
+                sb.append(s.charAt(i));
+            } else {
+                break;
+            }
+        }
+
+        return (sb.isEmpty() || (sb.length() == 1 && sb.charAt(0) == '-')) ? 0 : parseInt(sb.toString());
+    }
+
+    private boolean isSign(char c) {
+        return c == '+' || c == '-';
+    }
+
+    private int parseInt(String s) {
+        int result;
+        try {
+            result = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            if (s.charAt(0) == '-') {
+                result = Integer.MIN_VALUE;
+            } else {
+                result = Integer.MAX_VALUE;
+            }
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //A sentence is a list of tokens separated by a single space with no leading or trailing spaces. Every token is
+    // either a positive number consisting of digits 0-9 with no leading zeros, or a word consisting of lowercase
+    // English letters.
+    //For example, "a puppy has 2 eyes 4 legs" is a sentence with seven tokens: "2" and "4" are numbers and the other
+    // tokens such as "puppy" are words.
+    //Given a string s representing a sentence, you need to check if all the numbers in s are strictly increasing from
+    // left to right (i.e., other than the last number, each number is strictly smaller than the number on its
+    // right in s).
+    //Return true if so, or false otherwise.
+    //
+    //Example 1:
+    //example-1
+    //Input: s = "1 box has 3 blue 4 red 6 green and 12 yellow marbles"
+    //Output: true
+    //Explanation: The numbers in s are: 1, 3, 4, 6, 12.
+    //They are strictly increasing from left to right: 1 < 3 < 4 < 6 < 12.
+    //Example 2:
+    //Input: s = "hello world 5 x 5"
+    //Output: false
+    //Explanation: The numbers in s are: 5, 5. They are not strictly increasing.
+    //Example 3:
+    //example-3
+    //Input: s = "sunset is at 7 51 pm overnight lows will be in the low 50 and 60 s"
+    //Output: false
+    //Explanation: The numbers in s are: 7, 51, 50, 60. They are not strictly increasing.
+    public boolean areNumbersAscending(String s) {
+        int[] array = Arrays.stream(s.split("\\D"))
+                .filter(string -> !string.isEmpty())
+                .mapToInt(Integer::parseInt)
+                .toArray();
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] <= array[i - 1]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

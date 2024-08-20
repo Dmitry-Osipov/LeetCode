@@ -65,6 +65,11 @@ public class SolutionTest {
         findMedianSortedArrays();
         System.out.println("----------------------------");
         groupAnagrams();
+        System.out.println("----------------------------");
+        myAtoi();
+        System.out.println("----------------------------");
+        areNumbersAscending();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -340,5 +345,24 @@ public class SolutionTest {
         System.out.println(solution.groupAnagrams(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
         System.out.println(solution.groupAnagrams(new String[]{"a"}));
         System.out.println(solution.groupAnagrams(new String[]{""}));
+    }
+
+    public static void myAtoi() {
+        var solution = new Solution();
+        System.out.println(solution.myAtoi("42"));
+        System.out.println(solution.myAtoi("    -42"));
+        System.out.println(solution.myAtoi("1337c0d3"));
+        System.out.println(solution.myAtoi("0-1"));
+        System.out.println(solution.myAtoi("words and 987"));
+        System.out.println(solution.myAtoi("-91283472332"));
+        System.out.println(solution.myAtoi("+1"));
+        System.out.println(solution.myAtoi("    +12 123"));
+    }
+
+    public static void areNumbersAscending() {
+        var solution = new Solution();
+        System.out.println(solution.areNumbersAscending("1 box has 3 blue 4 red 6 green and 12 yellow marbles"));
+        System.out.println(solution.areNumbersAscending("hello world 5 x 5"));
+        System.out.println(solution.areNumbersAscending("sunset is at 7 51 pm overnight lows will be in the low 50 and 60 s"));
     }
 }
