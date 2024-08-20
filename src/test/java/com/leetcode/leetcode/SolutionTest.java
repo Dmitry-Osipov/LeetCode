@@ -76,6 +76,10 @@ public class SolutionTest {
         System.out.println("----------------------------");
         addTwoNumbers();
         System.out.println("----------------------------");
+        lengthOfLongestSubstring();
+        System.out.println("----------------------------");
+        intToRoman();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -396,5 +400,19 @@ public class SolutionTest {
                         new Solution.ListNode(1)),
                 new Solution.ListNode(1,
                         new Solution.ListNode(1))));
+    }
+
+    public static void lengthOfLongestSubstring() {
+        var solution = new Solution();
+        System.out.println(solution.lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(solution.lengthOfLongestSubstring("bbbbbb"));
+        System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
+    }
+
+    public static void intToRoman() {
+        var solution = new Solution();
+        System.out.println(solution.intToRoman(3749));
+        System.out.println(solution.intToRoman(58));
+        System.out.println(solution.intToRoman(1994));
     }
 }
