@@ -74,6 +74,8 @@ public class SolutionTest {
         System.out.println("----------------------------");
         tribonacci();
         System.out.println("----------------------------");
+        addTwoNumbers();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -384,5 +386,15 @@ public class SolutionTest {
         System.out.println(solution.tribonacci(3));
         System.out.println(solution.tribonacci(4));
         System.out.println(solution.tribonacci(25));
+    }
+
+    public static void addTwoNumbers() {
+        var solution = new Solution();
+        System.out.println(solution.addTwoNumbers(new Solution.ListNode(0), new Solution.ListNode(1)));
+        System.out.println(solution.addTwoNumbers(
+                new Solution.ListNode(0,
+                        new Solution.ListNode(1)),
+                new Solution.ListNode(1,
+                        new Solution.ListNode(1))));
     }
 }
