@@ -80,6 +80,32 @@ public class SolutionTest {
         System.out.println("----------------------------");
         intToRoman();
         System.out.println("----------------------------");
+        containsNearbyDuplicate();
+        System.out.println("----------------------------");
+        removeElements();
+        System.out.println("----------------------------");
+        numUniqueEmails();
+        System.out.println("----------------------------");
+        findMaxAverage();
+        System.out.println("----------------------------");
+        moveZeroes();
+        System.out.println("----------------------------");
+        isPerfectSquare();
+        System.out.println("----------------------------");
+        addDigits();
+        System.out.println("----------------------------");
+        checkRecord();
+        System.out.println("----------------------------");
+        postorderTraversal();
+        System.out.println("----------------------------");
+        middleNode();
+        System.out.println("----------------------------");
+        checkIfExist();
+        System.out.println("----------------------------");
+        search();
+        System.out.println("----------------------------");
+        peakIndexInMountainArray();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -414,5 +440,106 @@ public class SolutionTest {
         System.out.println(solution.intToRoman(3749));
         System.out.println(solution.intToRoman(58));
         System.out.println(solution.intToRoman(1994));
+    }
+
+    public static void containsNearbyDuplicate() {
+        var solution = new Solution();
+        System.out.println(solution.containsNearbyDuplicate(new int[] {1, 2, 3, 1}, 3));
+        System.out.println(solution.containsNearbyDuplicate(new int[] {1, 0, 1, 1}, 1));
+        System.out.println(solution.containsNearbyDuplicate(new int[] {1, 2, 3, 1, 2, 3}, 2));
+    }
+
+    public static void removeElements() {
+        var solution = new Solution();
+        Solution.ListNode head = new Solution.ListNode(1, new Solution.ListNode(2, new Solution.ListNode(6, new Solution.ListNode(3, new Solution.ListNode(4, new Solution.ListNode(5, new Solution.ListNode(6)))))));
+        System.out.println(solution.removeElements(head, 6));
+    }
+
+    public static void numUniqueEmails() {
+        var solution = new Solution();
+        System.out.println(solution.numUniqueEmails(new String[] {"test.email+alex@leetcode.com",
+                "test.e.mail+bob.cathy@leetcode.com", "testemail+david@lee.tcode.com"}));
+        System.out.println(solution.numUniqueEmails(new String[]{"a@leetcode.com", "b@leetcode.com",
+                "c@leetcode.com"}));
+    }
+
+    public static void findMaxAverage() {
+        var solution = new Solution();
+        System.out.println(solution.findMaxAverage(new int[] {1, 12, -5, -6, 50, 3}, 4));
+        System.out.println(solution.findMaxAverage(new int[] {5}, 1));
+    }
+
+    public static void moveZeroes() {
+        var solution = new Solution();
+        int[] array1 = new int[] {0, 1, 0, 3, 12};
+        int[] array2 = new int[] {0};
+        solution.moveZeroes(array1);
+        solution.moveZeroes(array2);
+        System.out.println(Arrays.toString(array1));
+        System.out.println(Arrays.toString(array2));
+    }
+
+    public static void isPerfectSquare() {
+        var solution = new Solution();
+        System.out.println(solution.isPerfectSquare(16));
+        System.out.println(solution.isPerfectSquare(14));
+        System.out.println(solution.isPerfectSquare(1));
+        System.out.println(solution.isPerfectSquare(Integer.MAX_VALUE));
+    }
+
+    public static void addDigits() {
+        var solution = new Solution();
+        System.out.println(solution.addDigits(38));
+        System.out.println(solution.addDigits(0));
+        System.out.println(solution.addDigits(Integer.MAX_VALUE));
+    }
+
+    public static void checkRecord() {
+        var solution = new Solution();
+        System.out.println(solution.checkRecord("PPALLP"));
+        System.out.println(solution.checkRecord("PPALLL"));
+        System.out.println(solution.checkRecord("A"));
+        System.out.println(solution.checkRecord("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPAPPPP" +
+                "PPPPPPPPPPPPPPPPPPPPPLLPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPLLPPPPPPPPPPPPPPPPPPPPLPLP" +
+                "LPLPLPPPPPPPPPPPPPPPPPPPPPPPPPPPPA"));
+    }
+
+    public static void postorderTraversal() {
+        var solution = new Solution();
+        Solution.TreeNode root = new Solution.TreeNode(1, null,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(3), null));
+        System.out.println(solution.postorderTraversal(root));
+    }
+
+    public static void middleNode() {
+        var solution = new Solution();
+        System.out.println(solution.middleNode(new Solution.ListNode(1, new Solution.ListNode(2, new Solution.ListNode(3, new Solution.ListNode(4, new Solution.ListNode(5)))))));
+        System.out.println(solution.middleNode(new Solution.ListNode(1, new Solution.ListNode(2, new Solution.ListNode(3, new Solution.ListNode(4, new Solution.ListNode(5, new Solution.ListNode(6))))))));
+    }
+
+    public static void checkIfExist() {
+        var solution = new Solution();
+        System.out.println(solution.checkIfExist(new int[] {10, 2, 5, 3}));
+        System.out.println(solution.checkIfExist(new int[] {3, 1, 7, 11}));
+        System.out.println(solution.checkIfExist(new int[] {7, 1, 14, 11}));
+        System.out.println(solution.checkIfExist(new int[] {7, 15, 3, 4, 30}));
+    }
+
+    public static void search() {
+        var solution = new Solution();
+        System.out.println(solution.search(new int[] {-1, 0, 3, 5, 9, 12}, 9));
+        System.out.println(solution.search(new int[] {-1, 0, 3, 5, 9, 12}, 2));
+    }
+
+    public static void peakIndexInMountainArray() {
+        var solution = new Solution();
+        System.out.println(solution.peakIndexInMountainArray(new int[] {0, 1, 0}));
+        System.out.println(solution.peakIndexInMountainArray(new int[] {0, 2, 1, 0}));
+        System.out.println(solution.peakIndexInMountainArray(new int[] {0, 10, 5, 2}));
+        System.out.println(solution.peakIndexInMountainArray(new int[] {3, 4, 5, 1}));
+        System.out.println(solution.peakIndexInMountainArray(new int[] {3, 5, 3, 2, 0}));
+        System.out.println(solution.peakIndexInMountainArray(new int[] {24, 69, 100, 99, 79, 78, 67, 36, 26, 19}));
+        System.out.println(solution.peakIndexInMountainArray(new int[] {18, 29, 38, 59, 98, 100, 99, 98, 90}));
     }
 }

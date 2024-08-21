@@ -2,6 +2,7 @@ package com.leetcode.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +10,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.IntSupplier;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
@@ -48,6 +51,9 @@ public class Solution {
     public static class ListNode {
         int val;
         ListNode next;
+
+        public ListNode() {
+        }
 
         public ListNode(int val) {
             this.val = val;
@@ -1288,5 +1294,461 @@ public class Solution {
         }
 
         return roman.toString();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the
+    // array such that nums[i] == nums[j] and abs(i - j) <= k.
+    //Example 1:
+    //Input: nums = [1,2,3,1], k = 3
+    //Output: true
+    //Example 2:
+    //Input: nums = [1,0,1,1], k = 1
+    //Output: true
+    //Example 3:
+    //Input: nums = [1,2,3,1,2,3], k = 2
+    //Output: false
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i]) && (i - map.get(nums[i]) <= k)) {
+                return true;
+            }
+
+            map.put(nums[i], i);
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the head of a linked list and an integer val, remove all the nodes of the linked list that has
+    // Node.val == val, and return the new head.
+    //Example 1:
+    //Input: head = [1,2,6,3,4,5,6], val = 6
+    //Output: [1,2,3,4,5]
+    //Example 2:
+    //Input: head = [], val = 1
+    //Output: []
+    //Example 3:
+    //Input: head = [7,7,7,7], val = 7
+    //Output: []
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+
+        ListNode current = head;
+        ListNode previous = dummy;
+        while (current != null) {
+            if (current.val == val) {
+                previous.next = current.next;
+            } else {
+                previous = current;
+            }
+
+            current = current.next;
+        }
+
+        return dummy.next;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Every valid email consists of a local name and a domain name, separated by the '@' sign. Besides lowercase
+    // letters, the email may contain one or more '.' or '+'.
+    //For example, in "alice@leetcode.com", "alice" is the local name, and "leetcode.com" is the domain name.
+    //If you add periods '.' between some characters in the local name part of an email address, mail sent there will
+    // be forwarded to the same address without dots in the local name. Note that this rule does not apply to
+    // domain names.
+    //For example, "alice.z@leetcode.com" and "alicez@leetcode.com" forward to the same email address.
+    //If you add a plus '+' in the local name, everything after the first plus sign will be ignored. This allows
+    // certain emails to be filtered. Note that this rule does not apply to domain names.
+    //For example, "m.y+name@email.com" will be forwarded to "my@email.com".
+    //It is possible to use both of these rules at the same time.
+    //Given an array of strings emails where we send one email to each emails[i], return the number of different
+    // addresses that actually receive mails.
+    //Example 1:
+    //Input: emails =
+    // ["test.email+alex@leetcode.com","test.e.mail+bob.cathy@leetcode.com","testemail+david@lee.tcode.com"]
+    //Output: 2
+    //Explanation: "testemail@leetcode.com" and "testemail@lee.tcode.com" actually receive mails.
+    //Example 2:
+    //Input: emails = ["a@leetcode.com","b@leetcode.com","c@leetcode.com"]
+    //Output: 3
+    public int numUniqueEmails(String[] emails) {
+        Set<String> unique = new HashSet<>();
+        for (String email : emails) {
+            var address = email.split("@");
+            address[0] = address[0].split("\\+")[0];
+            address[0] = address[0].replace(".", "");
+            unique.add(String.join("@", address));
+        }
+
+        return unique.size();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given an integer array nums consisting of n elements, and an integer k.
+    //Find a contiguous subarray whose length is equal to k that has the maximum average value and return this value.
+    // Any answer with a calculation error less than 10-5 will be accepted.
+    //Example 1:
+    //Input: nums = [1,12,-5,-6,50,3], k = 4
+    //Output: 12.75000
+    //Explanation: Maximum average is (12 - 5 - 6 + 50) / 4 = 51 / 4 = 12.75
+    //Example 2:
+    //Input: nums = [5], k = 1
+    //Output: 5.00000
+    public double findMaxAverage(int[] nums, int k) {
+        Set<Double> avgs = new TreeSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < k; i++) {
+            queue.add(nums[i]);
+        }
+        avgs.add(getAvg(queue));
+
+        for (int i = k; i < nums.length; i++) {
+            queue.remove();
+            queue.add(nums[i]);
+            avgs.add(getAvg(queue));
+        }
+
+        return avgs.stream()
+                .max(Double::compareTo)
+                .orElse((double) 0);
+    }
+
+    private double getAvg(Queue<Integer> queue) {
+        return queue.stream()
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero
+    // elements.
+    //Note that you must do this in-place without making a copy of the array.
+    //Example 1:
+    //Input: nums = [0,1,0,3,12]
+    //Output: [1,3,12,0,0]
+    //Example 2:
+    //Input: nums = [0]
+    //Output: [0]
+    public void moveZeroes(int[] nums) {
+        var temp = Arrays.stream(nums)
+                .boxed()
+                .sorted(new ZeroesComparator())
+                .mapToInt(Integer::intValue)
+                .toArray();
+        System.arraycopy(temp, 0, nums, 0, nums.length);
+    }
+
+    private static class ZeroesComparator implements Comparator<Integer> {
+
+        @Override
+        public int compare(Integer a, Integer b) {
+            if (a == 0 && b != 0) {
+                return 1;
+            } else if (a != 0 && b == 0) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a positive integer num, return true if num is a perfect square or false otherwise.
+    //A perfect square is an integer that is the square of an integer. In other words, it is the product of some
+    // integer with itself.
+    //You must not use any built-in library function, such as sqrt.
+    //Example 1:
+    //Input: num = 16
+    //Output: true
+    //Explanation: We return true because 4 * 4 = 16 and 4 is an integer.
+    //Example 2:
+    //Input: num = 14
+    //Output: false
+    //Explanation: We return false because 3.742 * 3.742 = 14 and 3.742 is not an integer.
+    public boolean isPerfectSquare(int num) {
+        long count = 0;
+        while (count * count <= num) {
+            if (count * count == num) {
+                return true;
+            }
+            count++;
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer num, repeatedly add all its digits until the result has only one digit, and return it.
+    //Example 1:
+    //Input: num = 38
+    //Output: 2
+    //Explanation: The process is
+    //38 --> 3 + 8 --> 11
+    //11 --> 1 + 1 --> 2
+    //Since 2 has only one digit, return it.
+    //Example 2:
+    //Input: num = 0
+    //Output: 0
+    public int addDigits(int num) {
+        String str = String.valueOf(num);
+        while (str.length() != 1) {
+            str = sumCharsInString(str);
+        }
+
+        return Integer.parseInt(str);
+    }
+
+    private String sumCharsInString(String str) {
+        return String.valueOf(Arrays.stream(str.split(""))
+                .mapToInt(Integer::parseInt)
+                .sum());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given a string s representing an attendance record for a student where each character signifies whether
+    // the student was absent, late, or present on that day. The record only contains the following three characters:
+    //'A': Absent.
+    //'L': Late.
+    //'P': Present.
+    //The student is eligible for an attendance award if they meet both of the following criteria:
+    //The student was absent ('A') for strictly fewer than 2 days total.
+    //The student was never late ('L') for 3 or more consecutive days.
+    //Return true if the student is eligible for an attendance award, or false otherwise.
+    //Example 1:
+    //Input: s = "PPALLP"
+    //Output: true
+    //Explanation: The student has fewer than 2 absences and was never late 3 or more consecutive days.
+    //Example 2:
+    //Input: s = "PPALLL"
+    //Output: false
+    //Explanation: The student was late 3 consecutive days in the last 3 days, so is not eligible for the award.
+    public boolean checkRecord(String s) {
+        return kmpSearch(s, "LLL").isEmpty() && kmpSearch(s, "A").size() < 2;
+    }
+
+    private List<Integer> kmpSearch(String text, String sample) {
+        List<Integer> result = new ArrayList<>();
+        int[] prefixFunc = prefixFunction(sample);
+        int i = 0;
+        int j = 0;
+        while (i < text.length()) {
+            if (sample.charAt(j) == text.charAt(i)) {
+                i++;
+                j++;
+            }
+
+            if (j == sample.length()) {
+                result.add(i - j);
+                j = prefixFunc[j - 1];
+            } else if (i < text.length() && text.charAt(i) != sample.charAt(j)) {
+                if (j != 0) {
+                    j = prefixFunc[j - 1];
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private int[] prefixFunction(String sample) {
+        int[] values = new int[sample.length()];
+        for (int i = 1; i < values.length; i++) {
+            int j = 0;
+            while(i + j < sample.length() && sample.charAt(i + j) == sample.charAt(j)) {
+                values[i + j] = Math.max(values[i + j], j + 1);
+                j++;
+            }
+        }
+
+        return values;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return the postorder traversal of its nodes' values.
+    //Example 1:
+    //Input: root = [] <- [1] -> [[3] <- 2 -> []]
+    //Output: [3,2,1]
+    //Example 2:
+    //Input: root = []
+    //Output: []
+    //Example 3:
+    //Input: root = [1]
+    //Output: [1]
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+
+        if (root == null) {
+            return result;
+        }
+
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            result.addFirst(node.val);
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the head of a singly linked list, return the middle node of the linked list.
+    //If there are two middle nodes, return the second middle node.
+    //Example 1:
+    //Input: head = [1,2,3,4,5]
+    //Output: [3,4,5]
+    //Explanation: The middle node of the list is node 3.
+    //Example 2:
+    //Input: head = [1,2,3,4,5,6]
+    //Output: [4,5,6]
+    //Explanation: Since the list has two middle nodes with values 3 and 4, we return the second one.
+    public ListNode middleNode(ListNode head) {
+        int count = 0;
+        int listSize = getSizeOfLinkedList(head);
+        ListNode current = head;
+        while (current != null) {
+            if (count < listSize / 2) {
+                current = current.next;
+                count++;
+            } else {
+                head = current;
+                break;
+            }
+        }
+
+        return head;
+    }
+
+    private int getSizeOfLinkedList(ListNode head) {
+        int size = 0;
+        if (head == null) {
+            return size;
+        }
+
+        while (head.next != null) {
+            head = head.next;
+            size++;
+        }
+
+        return ++size;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array arr of integers, check if there exist two indices i and j such that :
+    // 1) i != j
+    // 2) 0 <= i, j < arr.length
+    // 3) arr[i] == 2 * arr[j]
+    //Example 1:
+    //Input: arr = [10,2,5,3]
+    //Output: true
+    //Explanation: For i = 0 and j = 2, arr[i] == 10 == 2 * 5 == 2 * arr[j]
+    //Example 2:
+    //Input: arr = [3,1,7,11]
+    //Output: false
+    //Explanation: There is no i and j that satisfy the conditions.
+    public boolean checkIfExist(int[] arr) {
+        int length = arr.length;
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length; j++) {
+                if (i != j && arr[i] == 2 * arr[j]) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to
+    // search target in nums. If target exists, then return its index. Otherwise, return -1.
+    //You must write an algorithm with O(log n) runtime complexity.
+    //Example 1:
+    //Input: nums = [-1,0,3,5,9,12], target = 9
+    //Output: 4
+    //Explanation: 9 exists in nums and its index is 4
+    //Example 2:
+    //Input: nums = [-1,0,3,5,9,12], target = 2
+    //Output: -1
+    //Explanation: 2 does not exist in nums so return -1
+    public int search(int[] nums, int target) {
+        return binarySearch(nums, target, 0, nums.length - 1);
+    }
+
+    private int binarySearch(int[] nums, int target, int minPos, int maxPos) {
+        if (minPos > maxPos) {
+            return -1;
+        }
+
+        int mid = (minPos + maxPos) / 2;
+
+        if (nums[mid] == target) {
+            return mid;
+        }
+
+        return nums[mid] < target ? binarySearch(nums, target, mid + 1, maxPos) :
+                binarySearch(nums, target, minPos, mid - 1);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given an integer mountain array arr of length n where the values increase to a peak element and then
+    // decrease.
+    //Return the index of the peak element.
+    //Your task is to solve it in O(log(n)) time complexity.
+    //Example 1:
+    //Input: arr = [0,1,0]
+    //Output: 1
+    //Example 2:
+    //Input: arr = [0,2,1,0]
+    //Output: 1
+    //Example 3:
+    //Input: arr = [0,10,5,2]
+    //Output: 1
+    public int peakIndexInMountainArray(int[] arr) {
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (arr[mid - 1] < arr[mid] && arr[mid] > arr[mid + 1]) {
+                return mid;
+            }
+
+            if (arr[mid] > arr[mid - 1]) {
+                left = mid;
+            } else {
+                right = mid;
+            }
+        }
+
+        return -1;
     }
 }
