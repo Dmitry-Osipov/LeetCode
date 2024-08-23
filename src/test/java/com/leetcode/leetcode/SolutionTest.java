@@ -106,6 +106,22 @@ public class SolutionTest {
         System.out.println("----------------------------");
         peakIndexInMountainArray();
         System.out.println("----------------------------");
+        findComplement();
+        System.out.println("----------------------------");
+        findNumbers();
+        System.out.println("----------------------------");
+        removeDuplicates();
+        System.out.println("----------------------------");
+        firstBadVersion();
+        System.out.println("----------------------------");
+        guessNumber();
+        System.out.println("----------------------------");
+        isPowerOfFour();
+        System.out.println("----------------------------");
+        canPlaceFlowers();
+        System.out.println("----------------------------");
+        maxDepth();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -541,5 +557,68 @@ public class SolutionTest {
         System.out.println(solution.peakIndexInMountainArray(new int[] {3, 5, 3, 2, 0}));
         System.out.println(solution.peakIndexInMountainArray(new int[] {24, 69, 100, 99, 79, 78, 67, 36, 26, 19}));
         System.out.println(solution.peakIndexInMountainArray(new int[] {18, 29, 38, 59, 98, 100, 99, 98, 90}));
+    }
+
+    public static void findComplement() {
+        var solution = new Solution();
+        System.out.println(solution.findComplement(5));
+        System.out.println(solution.findComplement(1));
+    }
+
+    public static void findNumbers() {
+        var solution = new Solution();
+        System.out.println(solution.findNumbers(new int[]{12, 345, 2, 6, 7896}));
+        System.out.println(solution.findNumbers(new int[]{555, 901, 482, 1771}));
+    }
+
+    public static void removeDuplicates() {
+        var solution = new Solution();
+        System.out.println(solution.removeDuplicates("abbaca"));
+        System.out.println(solution.removeDuplicates("azxxzy"));
+    }
+
+    public static void firstBadVersion() {
+        var solution = new Solution();
+        System.out.println(solution.firstBadVersion(5));
+    }
+
+    public static void guessNumber() {
+        var solution = new Solution();
+        System.out.println(solution.guessNumber(10));
+    }
+
+    public static void isPowerOfFour() {
+        var solution = new Solution();
+        System.out.println(solution.isPowerOfFour(16));
+        System.out.println(solution.isPowerOfFour(5));
+        System.out.println(solution.isPowerOfFour(1));
+        System.out.println(solution.isPowerOfFour(0));
+        System.out.println(solution.isPowerOfFour(4));
+        System.out.println(solution.isPowerOfFour(64));
+    }
+
+    public static void canPlaceFlowers() {
+        var solution = new Solution();
+        System.out.println(solution.canPlaceFlowers(new int[] {1, 0, 0, 0, 1}, 1));
+        System.out.println(solution.canPlaceFlowers(new int[] {1, 0, 0, 0, 1}, 2));
+        System.out.println(solution.canPlaceFlowers(new int[] {0, 1, 0, 0, 0}, 2));
+        System.out.println(solution.canPlaceFlowers(new int[] {0, 0, 1, 0, 1}, 1));
+        System.out.println(solution.canPlaceFlowers(new int[] {1, 0, 1, 0, 0}, 1));
+    }
+
+    public static void maxDepth() {
+        var solution = new Solution();
+        Solution.TreeNode symmetricalRoot = new Solution.TreeNode(3,
+                new Solution.TreeNode(9,
+                        new Solution.TreeNode(5), null),
+                new Solution.TreeNode(20,
+                        null, new Solution.TreeNode(7)));
+        System.out.println(solution.maxDepth(symmetricalRoot));
+        Solution.TreeNode unsymmetricalRoot = new Solution.TreeNode(3,
+                new Solution.TreeNode(9),
+                new Solution.TreeNode(20,
+                        new Solution.TreeNode(15),
+                        new Solution.TreeNode(7)));
+        System.out.println(solution.maxDepth(unsymmetricalRoot));
     }
 }

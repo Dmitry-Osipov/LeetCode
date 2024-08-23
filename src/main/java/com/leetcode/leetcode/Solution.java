@@ -1751,4 +1751,273 @@ public class Solution {
 
         return -1;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //The complement of an integer is the integer you get when you flip all the 0's to 1's and all the 1's to 0's in
+    // its binary representation.
+    //For example, The integer 5 is "101" in binary and its complement is "010" which is the integer 2.
+    //Given an integer num, return its complement.
+    //Example 1:
+    //Input: num = 5
+    //Output: 2
+    //Explanation: The binary representation of 5 is 101 (no leading zero bits), and its complement is 010. So you
+    // need to output 2.
+    //Example 2:
+    //Input: num = 1
+    //Output: 0
+    //Explanation: The binary representation of 1 is 1 (no leading zero bits), and its complement is 0. So you
+    // need to output 0.
+    public int findComplement(int num) {
+        if (num == 0) {
+            return 1;
+        }
+
+        int bitLength = Integer.toBinaryString(num).length();
+        int mask = (1 << bitLength) - 1;  // Создаём маску, в которой двигаем единицу на длину изначального числа, а
+        // затем отнимаем единицу, чтобы конвертировать все нули в единицы (например, было 1000, станет 0111)
+        return num ^ mask;  // конвертируем биты изначального числа с маской (было 1010, станет 0101)
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array nums of integers, return how many of them contain an even number of digits.
+    //Example 1:
+    //Input: nums = [12,345,2,6,7896]
+    //Output: 2
+    //Explanation:
+    //12 contains 2 digits (even number of digits).
+    //345 contains 3 digits (odd number of digits).
+    //2 contains 1 digit (odd number of digits).
+    //6 contains 1 digit (odd number of digits).
+    //7896 contains 4 digits (even number of digits).
+    //Therefore only 12 and 7896 contain an even number of digits.
+    //Example 2:
+    //Input: nums = [555,901,482,1771]
+    //Output: 1
+    //Explanation:
+    //Only 1771 contains an even number of digits.
+    public int findNumbers(int[] nums) {
+        int count = 0;
+        for (int num : nums) {
+            int log = (int) Math.log10(num);
+            if (log >= 1 && log % 2 != 0) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given a string s consisting of lowercase English letters. A duplicate removal consists of choosing two
+    // adjacent and equal letters and removing them.
+    //We repeatedly make duplicate removals on s until we no longer can.
+    //Return the final string after all such duplicate removals have been made. It can be proven that the answer
+    // is unique.
+    //Example 1:
+    //Input: s = "abbaca"
+    //Output: "ca"
+    //Explanation:
+    //For example, in "abbaca" we could remove "bb" since the letters are adjacent and equal, and this is the only
+    // possible move.  The result of this move is that the string is "aaca", of which only "aa" is possible, so the
+    // final string is "ca".
+    //Example 2:
+    //Input: s = "azxxzy"
+    //Output: "ay"
+    public String removeDuplicates(String s) {
+        Deque<String> stack = new LinkedList<>();
+        for (String str : s.split("")) {
+            if (!stack.isEmpty() && stack.peekLast().equals(str)) {
+                stack.removeLast();
+            } else {
+                stack.addLast(str);
+            }
+        }
+
+        return String.join("", stack.toArray(String[]::new));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest
+    // version of your product fails the quality check. Since each version is developed based on the previous version,
+    // all the versions after a bad version are also bad.
+    //Suppose you have n versions [1, 2, ..., n] and you want to find out the first bad one, which causes all the
+    // following ones to be bad.
+    //You are given an API bool isBadVersion(version) which returns whether version is bad. Implement a function to
+    // find the first bad version. You should minimize the number of calls to the API.
+    //Example 1:
+    //Input: n = 5, bad = 4
+    //Output: 4
+    //Explanation:
+    //call isBadVersion(3) -> false
+    //call isBadVersion(5) -> true
+    //call isBadVersion(4) -> true
+    //Then 4 is the first bad version.
+    //Example 2:
+    //Input: n = 1, bad = 1
+    //Output: 1
+    public int firstBadVersion(int n) {
+        int left = 1, right = n;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (isBadVersion(mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return left;
+    }
+
+    // заглушка для теста
+    private static boolean isBadVersion(int n) {
+        return n >= 4;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //We are playing the Guess Game. The game is as follows:
+    //I pick a number from 1 to n. You have to guess which number I picked.
+    //Every time you guess wrong, I will tell you whether the number I picked is higher or lower than your guess.
+    //You call a pre-defined API int guess(int num), which returns three possible results:
+    //-1: Your guess is higher than the number I picked (i.e. num > pick).
+    //1: Your guess is lower than the number I picked (i.e. num < pick).
+    //0: your guess is equal to the number I picked (i.e. num == pick).
+    //Return the number that I picked.
+    //Example 1:
+    //Input: n = 10, pick = 6
+    //Output: 6
+    //Example 2:
+    //Input: n = 1, pick = 1
+    //Output: 1
+    //Example 3:
+    //Input: n = 2, pick = 1
+    //Output: 1
+    public int guessNumber(int n) {
+        int start = 1;
+        int end = n;
+        int middle;
+        int answer = -1;
+        while(start <= end) {
+            middle = start + (end - start) / 2;
+            if (guess(middle) == -1) {
+                end = middle - 1;
+            } else if (guess(middle) == 1) {
+                start = middle + 1;
+            } else {
+                answer = middle;
+                break;
+            }
+        }
+
+        return answer;
+    }
+
+    // заглушка для теста
+    private static int guess(int num) {
+        return Integer.compare(6, num);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer n, return true if it is a power of four. Otherwise, return false.
+    //An integer n is a power of four, if there exists an integer x such that n == 4x.
+    //Example 1:
+    //Input: n = 16
+    //Output: true
+    //Example 2:
+    //Input: n = 5
+    //Output: false
+    //Example 3:
+    //Input: n = 1
+    //Output: true
+    public boolean isPowerOfFour(int n) {
+        if (n < 1) {
+            return false;
+        }
+
+        if ((n & (n - 1)) != 0) {  // Проверка, что число не является степенью двойки
+            return false;
+        }
+
+        return (n & 0x55555555) != 0;  // Проверка, находится ли единичный бит в позиции, соответствующей степени 4
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You have a long flowerbed in which some of the plots are planted, and some are not. However, flowers cannot be
+    // planted in adjacent plots.
+    //Given an integer array flowerbed containing 0's and 1's, where 0 means empty and 1 means not empty, and an
+    // integer n, return true if n new flowers can be planted in the flowerbed without violating the
+    // no-adjacent-flowers rule and false otherwise.
+    //Example 1:
+    //Input: flowerbed = [1,0,0,0,1], n = 1
+    //Output: true
+    //Example 2:
+    //Input: flowerbed = [1,0,0,0,1], n = 2
+    //Output: false
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        if (n < 1) {
+            return true;
+        }
+
+        int length = flowerbed.length;
+        if (length == 1 && flowerbed[0] == 0) {
+            return true;
+        }
+
+        int count = 0;
+        while (count < length) {
+            try {
+                if (flowerbed[count] == 0) {
+                    if (flowerbed[count - 1] == 0 && flowerbed[count + 1] == 0) {
+                        flowerbed[count] = 1;
+                        n--;
+                    }
+                    count++;
+                } else {
+                    count += 2;
+                }
+            } catch (ArrayIndexOutOfBoundsException ignore) {
+                if (count == 0 && flowerbed[count + 1] == 0) {
+                    flowerbed[count] = 1;
+                    n--;
+                    count++;
+                } else if (count == length - 1 && flowerbed[count - 1] == 0) {
+                    flowerbed[count] = 1;
+                    n--;
+                    count++;
+                }
+
+                count++;
+            }
+        }
+
+        return n <= 0;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return its maximum depth.
+    //A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the
+    // farthest leaf node.
+    //Example 1:
+    //Input: root = [3,9,20,null,null,15,7]
+    //Output: 3
+    //Example 2:
+    //Input: root = [1,null,2]
+    //Output: 2
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int leftSubHeight = maxDepth(root.left);
+        int rightSubHeight = maxDepth(root.right);
+        return Math.max(leftSubHeight, rightSubHeight) + 1;
+    }
 }
