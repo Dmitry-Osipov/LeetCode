@@ -14,6 +14,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.IntSupplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 
@@ -1860,7 +1862,8 @@ public class Solution {
     //Input: n = 1, bad = 1
     //Output: 1
     public int firstBadVersion(int n) {
-        int left = 1, right = n;
+        int left = 1;
+        int right = n;
         while (left <= right) {
             int mid = (left + right) / 2;
             if (isBadVersion(mid)) {
@@ -2019,5 +2022,478 @@ public class Solution {
         int leftSubHeight = maxDepth(root.left);
         int rightSubHeight = maxDepth(root.right);
         return Math.max(leftSubHeight, rightSubHeight) + 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given two strings s and t, return true if they are equal when both are typed into empty text editors. '#' means
+    // a backspace character.
+    //Note that after backspacing an empty text, the text will continue empty.
+    //Example 1:
+    //Input: s = "ab#c", t = "ad#c"
+    //Output: true
+    //Explanation: Both s and t become "ac".
+    //Example 2:
+    //Input: s = "ab##", t = "c#d#"
+    //Output: true
+    //Explanation: Both s and t become "".
+    //Example 3:
+    //Input: s = "a#c", t = "b"
+    //Output: false
+    //Explanation: s becomes "c" while t becomes "b".
+    public boolean backspaceCompare(String s, String t) {
+        if (s.equals(t)) {
+            return true;
+        }
+
+        Deque<Character> stackS = new LinkedList<>();
+        for (Character c : s.toCharArray()) {
+            pushOrRemoveChar(c, stackS);
+        }
+
+        Deque<Character> stackT = new LinkedList<>();
+        for (Character c : t.toCharArray()) {
+            pushOrRemoveChar(c, stackT);
+        }
+
+        return stackS.equals(stackT);
+    }
+
+    private void pushOrRemoveChar(Character c, Deque<Character> stack) {
+        if (c.equals('#')) {
+            if (!stack.isEmpty()) {
+                stack.remove();
+            }
+        } else {
+            stack.push(c);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string expression representing an expression of fraction addition and subtraction, return the
+    // calculation result in string format.
+    //The final result should be an irreducible fraction. If your final result is an integer, change it to the format
+    // of a fraction that has a denominator 1. So in this case, 2 should be converted to 2/1.
+    //Example 1:
+    //Input: expression = "-1/2+1/2"
+    //Output: "0/1"
+    //Example 2:
+    //Input: expression = "-1/2+1/2+1/3"
+    //Output: "1/3"
+    //Example 3:
+    //Input: expression = "1/3-1/2"
+    //Output: "-1/6"
+    public String fractionAddition(String expression) {
+        int numerator = 0, denominator = 1;
+
+        Pattern pattern = Pattern.compile("([+-]?\\d+)/(\\d+)");
+        Matcher matcher = pattern.matcher(expression);
+
+        while (matcher.find()) {
+            int num = Integer.parseInt(matcher.group(1));
+            int den = Integer.parseInt(matcher.group(2));
+
+            numerator = numerator * den + num * denominator;
+            denominator *= den;
+
+            int gcdVal = gcd(Math.abs(numerator), denominator);
+            numerator /= gcdVal;
+            denominator /= gcdVal;
+        }
+
+        return numerator + "/" + denominator;
+    }
+
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given head, the head of a linked list, determine if the linked list has a cycle in it.
+    //There is a cycle in a linked list if there is some node in the list that can be reached again by continuously
+    // following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer
+    // is connected to. Note that pos is not passed as a parameter.
+    //Return true if there is a cycle in the linked list. Otherwise, return false.
+    //Example 1:
+    //Input: head = [3,2,0,-4], pos = 1
+    //Output: true
+    //Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+    //Example 2:
+    //Input: head = [1,2], pos = 0
+    //Output: true
+    //Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
+    //Example 3:
+    //Input: head = [1], pos = -1
+    //Output: false
+    //Explanation: There is no cycle in the linked list.
+    public boolean hasCycle1(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+
+        Set<ListNode> seen = new HashSet<>();
+        ListNode current = head;
+        while (current != null) {
+            if (seen.contains(current)) {
+                return true;
+            }
+
+            seen.add(current);
+            current = current.next;
+        }
+
+        return false;
+    }
+
+    public boolean hasCycle2(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if (fast == slow) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer n, return true if it is a power of two. Otherwise, return false.
+    //An integer n is a power of two, if there exists an integer x such that n == 2x.
+    //Example 1:
+    //Input: n = 1
+    //Output: true
+    //Explanation: 20 = 1
+    //Example 2:
+    //Input: n = 16
+    //Output: true
+    //Explanation: 24 = 16
+    //Example 3:
+    //Input: n = 3
+    //Output: false
+    public boolean isPowerOfTwo(int n) {
+        if (n < 1) {
+            return false;
+        }
+
+        return (Math.log10(n) / Math.log10(2)) % 1 == 0;  // Обычный логарифм не сработал на 2^29, ибо арифметика
+        // с плавающей точкой
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //The Hamming distance between two integers is the number of positions at which the corresponding bits are
+    // different.
+    //Given two integers x and y, return the Hamming distance between them.
+    //Example 1:
+    //Input: x = 1, y = 4
+    //Output: 2
+    //Explanation:
+    //1   (0 0 0 1)
+    //4   (0 1 0 0)
+    //       ↑   ↑
+    //The above arrows point to positions where the corresponding bits are different.
+    //Example 2:
+    //Input: x = 3, y = 1
+    //Output: 1
+    public int hammingDistance(int x, int y) {
+        int xor = x ^ y, distance = 0;
+
+        while(xor != 0) {
+            if(xor % 2 == 1)
+                distance++;
+            xor = xor >> 1;
+        }
+
+        return distance;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that
+    // is missing from the array.
+    //Example 1:
+    //Input: nums = [3,0,1]
+    //Output: 2
+    //Explanation: n = 3 since there are 3 numbers, so all numbers are in the range [0,3]. 2 is the missing number in
+    // the range since it does not appear in nums.
+    //Example 2:
+    //Input: nums = [0,1]
+    //Output: 2
+    //Explanation: n = 2 since there are 2 numbers, so all numbers are in the range [0,2]. 2 is the missing number in
+    // the range since it does not appear in nums.
+    //Example 3:
+    //Input: nums = [9,6,4,2,3,5,7,0,1]
+    //Output: 8
+    //Explanation: n = 9 since there are 9 numbers, so all numbers are in the range [0,9]. 8 is the missing number in
+    // the range since it does not appear in nums.
+    public int missingNumber(int[] nums) {
+        int res = nums.length;
+        for (int i = 0; i < nums.length; i++) {
+            res += i - nums[i];
+        }
+
+        return res;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return all root-to-leaf paths in any order.
+    //A leaf is a node with no children.
+    //Example 1:
+    //Input: root = [1,2,3,null,5]
+    //Output: ["1->2->5","1->3"]
+    //Example 2:
+    //Input: root = [1]
+    //Output: ["1"]
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        dfs(root, "", res);
+        return res;
+    }
+
+    private void dfs(TreeNode node, String path, List<String> res) {
+        path += node.val + "->";
+
+        if (node.left == null && node.right == null) {
+            res.add(path.substring(0, path.length() - 2));
+            return;
+        }
+
+        if (node.left != null) {
+            dfs(node.left, path, res);
+        }
+
+        if (node.right != null) {
+            dfs(node.right, path, res);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums where the elements are sorted in ascending order, convert it to a
+    //height-balanced binary search tree.
+    //Example 1:
+    //Input: nums = [-10,-3,0,5,9]
+    //Output: [0,-3,9,-10,null,5]
+    //Explanation: [0,-10,5,null,-3,null,9] is also accepted:
+    //Example 2:
+    //Input: nums = [1,3]
+    //Output: [3,1]
+    //Explanation: [1,null,3] and [3,1] are both height-balanced BSTs.
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+
+        return helper(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode helper(int[] nums, int left, int right) {
+        if (left <= right) {  // По принципу бинарного поиска текущую голову выдаём за середину, а остальное цепляем
+            // справа или слева
+            int mid = (left + right) / 2;
+            TreeNode node = new TreeNode(nums[mid]);
+            node.left = helper(nums, left, mid - 1);
+            node.right = helper(nums, mid + 1, right);
+
+            return node;
+        }
+
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given two binary trees root1 and root2.
+    //Imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the
+    // others are not. You need to merge the two trees into a new binary tree. The merge rule is that if two nodes
+    // overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be
+    // used as the node of the new tree.
+    //Return the merged tree.
+    //Note: The merging process must start from the root nodes of both trees.
+    //Example 1:
+    //Input: root1 = [1,3,2,5], root2 = [2,1,3,null,4,null,7]
+    //Output: [3,4,5,5,4,null,7]
+    //Example 2:
+    //Input: root1 = [1], root2 = [1,2]
+    //Output: [2,2]
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null || root2 == null) {
+            return root1 == null ? root2 : root1;
+        }
+
+        return mergeNodes(root1, root2);
+    }
+
+    private TreeNode mergeNodes(TreeNode root1, TreeNode root2) {
+        if (root1 != null && root2 != null) {
+            root1.val += root2.val;
+            root1.left = mergeNodes(root1.left, root2.left);
+            root1.right = mergeNodes(root1.right, root2.right);
+        }
+
+        if (root1 == null) {
+            return root2;
+        }
+
+        return root1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an n x n binary matrix image, flip the image horizontally, then invert it, and return the resulting image.
+    //To flip an image horizontally means that each row of the image is reversed.
+    //For example, flipping [1,1,0] horizontally results in [0,1,1].
+    //To invert an image means that each 0 is replaced by 1, and each 1 is replaced by 0.
+    //For example, inverting [0,1,1] results in [1,0,0].
+    //Example 1:
+    //Input: image = [[1,1,0],[1,0,1],[0,0,0]]
+    //Output: [[1,0,0],[0,1,0],[1,1,1]]
+    //Explanation: First reverse each row: [[0,1,1],[1,0,1],[0,0,0]].
+    //Then, invert the image: [[1,0,0],[0,1,0],[1,1,1]]
+    //Example 2:
+    //Input: image = [[1,1,0,0],[1,0,0,1],[0,1,1,1],[1,0,1,0]]
+    //Output: [[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+    //Explanation: First reverse each row: [[0,0,1,1],[1,0,0,1],[1,1,1,0],[0,1,0,1]].
+    //Then invert the image: [[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+    public int[][] flipAndInvertImage1(int[][] image) {
+        List<List<Integer>> list = new ArrayList<>();
+        for (int i = 0; i < image.length; i++) {
+            list.add(new ArrayList<>());
+            for (int j = 0; j < image[i].length; j++) {
+                list.get(i).add(image[i][j]);
+            }
+            list.set(i, list.get(i).reversed());
+        }
+
+        for (int i = 0; i < image.length; i++) {
+            for (int j = 0; j < image[i].length; j++) {
+                image[i][j] = list.get(i).get(j) == 0 ? 1 : 0;
+            }
+        }
+
+        return image;
+    }
+
+    public int[][] flipAndInvertImage2(int[][] image) {  // Такой же по скорости, что и List, но без ручных переворотов
+        for (int i = 0; i < image.length; i++) {
+            for (int j = 0; j < image[i].length; j++) {
+                image[i][j] = image[i][j] == 0 ? 1 : 0;
+            }
+
+            for (int j = 0; j < image[i].length / 2; j++) {
+                int temp = image[i][j];
+                image[i][j] = image[i][image.length - 1 - j];
+                image[i][image.length - 1 - j] = temp;
+            }
+        }
+
+        return image;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such
+    // that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2]
+    // where 1 <= index1 < index2 <= numbers.length.
+    //Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2]
+    // of length 2.
+    //The tests are generated such that there is exactly one solution. You may not use the same element twice.
+    //Your solution must use only constant extra space.
+    //Example 1:
+    //Input: numbers = [2,7,11,15], target = 9
+    //Output: [1,2]
+    //Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [1, 2].
+    //Example 2:
+    //Input: numbers = [2,3,4], target = 6
+    //Output: [1,3]
+    //Explanation: The sum of 2 and 4 is 6. Therefore index1 = 1, index2 = 3. We return [1, 3].
+    //Example 3:
+    //Input: numbers = [-1,0], target = -1
+    //Output: [1,2]
+    //Explanation: The sum of -1 and 0 is -1. Therefore index1 = 1, index2 = 2. We return [1, 2].
+    public int[] twoSumMedium(int[] numbers, int target) {
+        int left = 0, right = numbers.length - 1;
+        while (left <= right) {
+            int current = numbers[left] + numbers[right];
+            if (current == target) {
+                return new int[]{left + 1, right + 1};
+            }
+
+            if (current > target) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+
+        return new int[] {1, 2};
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //In an alien language, surprisingly, they also use English lowercase letters, but possibly in a different order.
+    // The order of the alphabet is some permutation of lowercase letters.
+    //Given a sequence of words written in the alien language, and the order of the alphabet, return true if and only
+    // if the given words are sorted lexicographically in this alien language.
+    //Example 1:
+    //Input: words = ["hello","leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz"
+    //Output: true
+    //Explanation: As 'h' comes before 'l' in this language, then the sequence is sorted.
+    //Example 2:
+    //Input: words = ["word","world","row"], order = "worldabcefghijkmnpqstuvxyz"
+    //Output: false
+    //Explanation: As 'd' comes after 'l' in this language, then words[0] > words[1], hence the sequence is unsorted.
+    //Example 3:
+    //Input: words = ["apple","app"], order = "abcdefghijklmnopqrstuvwxyz"
+    //Output: false
+    //Explanation: The first three characters "app" match, and the second string is shorter (in size.) According to
+    // lexicographical rules "apple" > "app", because 'l' > '∅', where '∅' is defined as the blank character which is
+    // less than any other character
+    public boolean isAlienSorted(String[] words, String order) {
+        Map<Character, Integer> weights = prepareMap(order);
+
+        for (int i = 0; i < words.length - 1; i++) {
+            String str1 = words[i];
+            String str2 = words[i + 1];
+            for (int j = 0; j < str1.length(); j++) {
+                if (j >= str2.length()) {
+                    return false;
+                }
+
+                if (weights.get(str1.charAt(j)) < weights.get(str2.charAt(j))) {
+                    break;
+                }
+
+                if (weights.get(str1.charAt(j)) > weights.get(str2.charAt(j))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private Map<Character, Integer> prepareMap(String order) {
+        Map<Character, Integer> map = new HashMap<>();
+        char[] chars = order.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            map.put(chars[i], i);
+        }
+
+        return map;
     }
 }

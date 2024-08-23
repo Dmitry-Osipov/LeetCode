@@ -2,6 +2,7 @@ package com.leetcode.leetcode;
 
 import java.util.Arrays;
 
+@SuppressWarnings("java:S2187")
 public class SolutionTest {
     public static void main(String[] args) {
         twoSum();
@@ -121,6 +122,30 @@ public class SolutionTest {
         canPlaceFlowers();
         System.out.println("----------------------------");
         maxDepth();
+        System.out.println("----------------------------");
+        backspaceCompare();
+        System.out.println("----------------------------");
+        fractionAddition();
+        System.out.println("----------------------------");
+        hasCycle();
+        System.out.println("----------------------------");
+        isPowerOfTwo();
+        System.out.println("----------------------------");
+        hammingDistance();
+        System.out.println("----------------------------");
+        missingNumber();
+        System.out.println("----------------------------");
+        binaryTreePaths();
+        System.out.println("----------------------------");
+        sortedArrayToBST();
+        System.out.println("----------------------------");
+        mergeTrees();
+        System.out.println("----------------------------");
+        flipAndInvertImage();
+        System.out.println("----------------------------");
+        twoSumMedium();
+        System.out.println("----------------------------");
+        isAlienSorted();
         System.out.println("----------------------------");
     }
 
@@ -620,5 +645,104 @@ public class SolutionTest {
                         new Solution.TreeNode(15),
                         new Solution.TreeNode(7)));
         System.out.println(solution.maxDepth(unsymmetricalRoot));
+    }
+
+    public static void backspaceCompare() {
+        var solution = new Solution();
+        System.out.println(solution.backspaceCompare("ab#c", "ad#c"));
+        System.out.println(solution.backspaceCompare("ab##", "c#d#"));
+        System.out.println(solution.backspaceCompare("a#c", "b"));
+        System.out.println(solution.backspaceCompare("#ab", "b"));
+        System.out.println(solution.backspaceCompare("xywrrmp", "xywrrmu#p"));
+    }
+
+    public static void fractionAddition() {
+        var solution = new Solution();
+        System.out.println(solution.fractionAddition("-1/2+1/2"));
+        System.out.println(solution.fractionAddition("-1/2+1/2+1/3"));
+        System.out.println(solution.fractionAddition("1/3-1/2"));
+        System.out.println(solution.fractionAddition("1/1-1/2+5/10"));
+    }
+
+    public static void hasCycle() {
+        var solution = new Solution();
+        System.out.println(solution.hasCycle1(new Solution.ListNode(1, new Solution.ListNode(2))));
+        System.out.println(solution.hasCycle2(new Solution.ListNode(1, new Solution.ListNode(2))));
+    }
+
+    public static void isPowerOfTwo() {
+        var solution = new Solution();
+        int count = 0;
+        for (int i = 0; i < 33; i++) {
+            if (solution.isPowerOfTwo(i)) {
+                count++;
+            }
+        }
+        System.out.println(count == 6);
+    }
+
+    public static void hammingDistance() {
+        var solution = new Solution();
+        System.out.println(solution.hammingDistance(1, 4));
+        System.out.println(solution.hammingDistance(3, 1));
+    }
+
+    public static void missingNumber() {
+        var solution = new Solution();
+        System.out.println(solution.missingNumber(new int[]{3, 0, 1}));
+        System.out.println(solution.missingNumber(new int[]{0, 1}));
+        System.out.println(solution.missingNumber(new int[]{9, 6, 4, 2, 3, 5, 7, 0, 1}));
+        System.out.println(solution.missingNumber(new int[]{1}));
+        System.out.println(solution.missingNumber(new int[]{0}));
+    }
+
+    public static void binaryTreePaths() {
+        var solution = new Solution();
+        System.out.println(solution.binaryTreePaths(new Solution.TreeNode(1,
+                new Solution.TreeNode(2,
+                        null, new Solution.TreeNode(5)),
+                new Solution.TreeNode(3))));
+    }
+
+    public static void sortedArrayToBST() {
+        var solution = new Solution();
+        System.out.println(solution.sortedArrayToBST(new int[] {-10, -3, 0, 5, 9}));
+        System.out.println(solution.sortedArrayToBST(new int[] {1, 3}));
+    }
+
+    public static void mergeTrees() {
+        var solution = new Solution();
+        System.out.println(solution.mergeTrees(
+                new Solution.TreeNode(1,
+                        new Solution.TreeNode(3,
+                                new Solution.TreeNode(5), null),
+                        new Solution.TreeNode(2)),
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(1,
+                                null, new Solution.TreeNode(4)),
+                        new Solution.TreeNode(3, null, new Solution.TreeNode(7)))
+                ));
+    }
+
+    public static void flipAndInvertImage() {
+        var solution = new Solution();
+        System.out.println(Arrays.deepToString(solution.flipAndInvertImage1(new int[][]{{1, 1, 0}, {1, 0, 1}, {0, 0, 0}})));
+        System.out.println(Arrays.deepToString(solution.flipAndInvertImage2(new int[][]{{1, 1, 0, 0}, {1, 0, 0, 1}, {0, 1, 1, 1}, {1, 0, 1, 0}})));
+    }
+
+    public static void twoSumMedium() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.twoSumMedium(new int[]{2, 7, 11, 15}, 9)));
+        System.out.println(Arrays.toString(solution.twoSumMedium(new int[]{2, 3, 4}, 6)));
+        System.out.println(Arrays.toString(solution.twoSumMedium(new int[]{-1, 0}, -1)));
+    }
+
+    public static void isAlienSorted() {
+        var solution = new Solution();
+        System.out.println(solution.isAlienSorted(new String[]{"hello", "leetcode"}, "hlabcdefgijkmnopqrstuvwxyz"));
+        System.out.println(solution.isAlienSorted(new String[]{"word", "world", "row"}, "worldabcefghijkmnpqstuvxyz"));
+        System.out.println(solution.isAlienSorted(new String[]{"apple", "app"}, "abcdefghijklmnopqrstuvwxyz"));
+        System.out.println(solution.isAlienSorted(new String[]{"kuvp", "q"}, "ngxlkthsjuoqcpavbfdermiywz"));
+        System.out.println(solution.isAlienSorted(new String[]{"fxasxpc","dfbdrifhp","nwzgs","cmwqriv","ebulyfyve","miracx","sxckdwzv","dtijzluhts","wwbmnge","qmjwymmyox"}, "zkgwaverfimqxbnctdplsjyohu"));
     }
 }
