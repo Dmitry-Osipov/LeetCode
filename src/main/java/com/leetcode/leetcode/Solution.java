@@ -1829,16 +1829,16 @@ public class Solution {
     //Input: s = "azxxzy"
     //Output: "ay"
     public String removeDuplicates(String s) {
-        Deque<String> stack = new LinkedList<>();
-        for (String str : s.split("")) {
-            if (!stack.isEmpty() && stack.peekLast().equals(str)) {
+        Deque<Character> stack = new LinkedList<>();
+        for (Character c : s.toCharArray()) {
+            if (!stack.isEmpty() && stack.peekLast().equals(c)) {
                 stack.removeLast();
             } else {
-                stack.addLast(str);
+                stack.addLast(c);
             }
         }
 
-        return String.join("", stack.toArray(String[]::new));
+        return Arrays.toString(stack.toArray(Character[]::new));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2085,7 +2085,8 @@ public class Solution {
     //Input: expression = "1/3-1/2"
     //Output: "-1/6"
     public String fractionAddition(String expression) {
-        int numerator = 0, denominator = 1;
+        int numerator = 0;
+        int denominator = 1;
 
         Pattern pattern = Pattern.compile("([+-]?\\d+)/(\\d+)");
         Matcher matcher = pattern.matcher(expression);
@@ -2209,7 +2210,8 @@ public class Solution {
     //Input: x = 3, y = 1
     //Output: 1
     public int hammingDistance(int x, int y) {
-        int xor = x ^ y, distance = 0;
+        int xor = x ^ y;
+        int distance = 0;
 
         while(xor != 0) {
             if(xor % 2 == 1)
@@ -2426,7 +2428,8 @@ public class Solution {
     //Output: [1,2]
     //Explanation: The sum of -1 and 0 is -1. Therefore index1 = 1, index2 = 2. We return [1, 2].
     public int[] twoSumMedium(int[] numbers, int target) {
-        int left = 0, right = numbers.length - 1;
+        int left = 0;
+        int right = numbers.length - 1;
         while (left <= right) {
             int current = numbers[left] + numbers[right];
             if (current == target) {
@@ -2440,7 +2443,7 @@ public class Solution {
             }
         }
 
-        return new int[] {1, 2};
+        return new int[] {-1, -1};
     }
 
     //------------------------------------------------------------------------------------------------------------------
