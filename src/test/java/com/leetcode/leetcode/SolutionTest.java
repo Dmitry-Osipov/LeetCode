@@ -147,6 +147,72 @@ public class SolutionTest {
         System.out.println("----------------------------");
         isAlienSorted();
         System.out.println("----------------------------");
+        validMountainArray();
+        System.out.println("----------------------------");
+        licenseKeyFormatting();
+        System.out.println("----------------------------");
+        findContentChildren();
+        System.out.println("----------------------------");
+        summaryRanges();
+        System.out.println("----------------------------");
+        kidsWithCandies();
+        System.out.println("----------------------------");
+        reverseVowels();
+        System.out.println("----------------------------");
+        sumOfLeftLeaves();
+        System.out.println("----------------------------");
+        longestPalindrome();
+        System.out.println("----------------------------");
+        preorderTraversal();
+        System.out.println("----------------------------");
+        findMaxConsecutiveOnes();
+        System.out.println("----------------------------");
+        findLengthOfLCIS();
+        System.out.println("----------------------------");
+        removeDuplicatesFromArray();
+        System.out.println("----------------------------");
+        runningSum();
+        System.out.println("----------------------------");
+        intersection();
+        System.out.println("----------------------------");
+        searchBST();
+        System.out.println("----------------------------");
+        getDecimalValue();
+        System.out.println("----------------------------");
+        hammingWeight();
+        System.out.println("----------------------------");
+        rangeSumBST();
+        System.out.println("----------------------------");
+        sortArrayByParity();
+        System.out.println("----------------------------");
+        findTarget();
+        System.out.println("----------------------------");
+        averageOfLevels();
+        System.out.println("----------------------------");
+        findDisappearedNumbers();
+        System.out.println("----------------------------");
+        invertTree();
+        System.out.println("----------------------------");
+        sortedSquares();
+        System.out.println("----------------------------");
+        numJewelsInStones();
+        System.out.println("----------------------------");
+        deleteDuplicates();
+        System.out.println("----------------------------");
+        firstUniqChar();
+        System.out.println("----------------------------");
+        canConstruct();
+        System.out.println("----------------------------");
+        fizzBuzz();
+        System.out.println("----------------------------");
+        detectCapitalUse();
+        System.out.println("----------------------------");
+        isHappy();
+        System.out.println("----------------------------");
+        intersect();
+        System.out.println("----------------------------");
+        isSubtree();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -492,7 +558,12 @@ public class SolutionTest {
 
     public static void removeElements() {
         var solution = new Solution();
-        Solution.ListNode head = new Solution.ListNode(1, new Solution.ListNode(2, new Solution.ListNode(6, new Solution.ListNode(3, new Solution.ListNode(4, new Solution.ListNode(5, new Solution.ListNode(6)))))));
+        Solution.ListNode head = new Solution.ListNode(1, new Solution.ListNode(2,
+                new Solution.ListNode(6,
+                        new Solution.ListNode(3,
+                                new Solution.ListNode(4,
+                                        new Solution.ListNode(5,
+                                                new Solution.ListNode(6)))))));
         System.out.println(solution.removeElements(head, 6));
     }
 
@@ -555,8 +626,17 @@ public class SolutionTest {
 
     public static void middleNode() {
         var solution = new Solution();
-        System.out.println(solution.middleNode(new Solution.ListNode(1, new Solution.ListNode(2, new Solution.ListNode(3, new Solution.ListNode(4, new Solution.ListNode(5)))))));
-        System.out.println(solution.middleNode(new Solution.ListNode(1, new Solution.ListNode(2, new Solution.ListNode(3, new Solution.ListNode(4, new Solution.ListNode(5, new Solution.ListNode(6))))))));
+        System.out.println(solution.middleNode(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(3,
+                                new Solution.ListNode(4,
+                                        new Solution.ListNode(5)))))));
+        System.out.println(solution.middleNode(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(3,
+                                new Solution.ListNode(4,
+                                        new Solution.ListNode(5,
+                                                new Solution.ListNode(6))))))));
     }
 
     public static void checkIfExist() {
@@ -726,8 +806,10 @@ public class SolutionTest {
 
     public static void flipAndInvertImage() {
         var solution = new Solution();
-        System.out.println(Arrays.deepToString(solution.flipAndInvertImage1(new int[][]{{1, 1, 0}, {1, 0, 1}, {0, 0, 0}})));
-        System.out.println(Arrays.deepToString(solution.flipAndInvertImage2(new int[][]{{1, 1, 0, 0}, {1, 0, 0, 1}, {0, 1, 1, 1}, {1, 0, 1, 0}})));
+        System.out.println(Arrays.deepToString(solution.flipAndInvertImage1(new int[][]{{1, 1, 0}, {1, 0, 1},
+                {0, 0, 0}})));
+        System.out.println(Arrays.deepToString(solution.flipAndInvertImage2(new int[][]{{1, 1, 0, 0}, {1, 0, 0, 1},
+                {0, 1, 1, 1}, {1, 0, 1, 0}})));
     }
 
     public static void twoSumMedium() {
@@ -743,6 +825,297 @@ public class SolutionTest {
         System.out.println(solution.isAlienSorted(new String[]{"word", "world", "row"}, "worldabcefghijkmnpqstuvxyz"));
         System.out.println(solution.isAlienSorted(new String[]{"apple", "app"}, "abcdefghijklmnopqrstuvwxyz"));
         System.out.println(solution.isAlienSorted(new String[]{"kuvp", "q"}, "ngxlkthsjuoqcpavbfdermiywz"));
-        System.out.println(solution.isAlienSorted(new String[]{"fxasxpc","dfbdrifhp","nwzgs","cmwqriv","ebulyfyve","miracx","sxckdwzv","dtijzluhts","wwbmnge","qmjwymmyox"}, "zkgwaverfimqxbnctdplsjyohu"));
+        System.out.println(solution.isAlienSorted(new String[]{"fxasxpc","dfbdrifhp","nwzgs","cmwqriv","ebulyfyve",
+                "miracx","sxckdwzv","dtijzluhts","wwbmnge","qmjwymmyox"}, "zkgwaverfimqxbnctdplsjyohu"));
+    }
+
+    public static void validMountainArray() {
+        var solution = new Solution();
+        System.out.println(solution.validMountainArray1(new int[] {2, 1}));
+        System.out.println(solution.validMountainArray1(new int[] {3, 5, 5}));
+        System.out.println(solution.validMountainArray1(new int[] {0, 3, 2, 1}));
+        System.out.println(solution.validMountainArray1(new int[] {0, 2, 3, 4, 5, 2, 1, 0}));
+        System.out.println("###########################");
+        System.out.println(solution.validMountainArray2(new int[] {2, 1}));
+        System.out.println(solution.validMountainArray2(new int[] {3, 5, 5}));
+        System.out.println(solution.validMountainArray2(new int[] {0, 3, 2, 1}));
+        System.out.println(solution.validMountainArray2(new int[] {0, 2, 3, 4, 5, 2, 1, 0}));
+    }
+
+    public static void licenseKeyFormatting() {
+        var solution = new Solution();
+        System.out.println(solution.licenseKeyFormatting("5F3Z-2e-9-w", 4));
+        System.out.println(solution.licenseKeyFormatting("2-5g-3-J", 2));
+        System.out.println(solution.licenseKeyFormatting("2-4A0r7-4k", 4));
+        System.out.println(solution.licenseKeyFormatting("---", 3));
+    }
+
+    public static void findContentChildren() {
+        var solution = new Solution();
+        System.out.println(solution.findContentChildren(new int[] {1, 2, 3}, new int[] {1, 1}));
+        System.out.println(solution.findContentChildren(new int[] {1, 2}, new int[] {1, 2, 3}));
+        System.out.println(solution.findContentChildren(new int[] {10, 9, 8, 7}, new int[] {5, 6, 7, 8}));
+    }
+
+    public static void summaryRanges() {
+        var solution = new Solution();
+        System.out.println(solution.summaryRanges(new int[] {0, 1, 2, 4, 5, 7}));
+        System.out.println(solution.summaryRanges(new int[] {0, 2, 3, 4, 6, 8, 9}));
+        System.out.println(solution.summaryRanges(new int[] {-1}));
+        System.out.println(solution.summaryRanges(new int[] {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE}));
+    }
+
+    public static void kidsWithCandies() {
+        var solution = new Solution();
+        System.out.println(solution.kidsWithCandies(new int[] {2, 3, 5, 1, 3}, 3));
+        System.out.println(solution.kidsWithCandies(new int[] {4, 2, 1, 1, 2}, 1));
+        System.out.println(solution.kidsWithCandies(new int[] {12, 1, 12}, 10));
+    }
+
+    public static void reverseVowels() {
+        var solution = new Solution();
+        System.out.println(solution.reverseVowels("hello"));
+        System.out.println(solution.reverseVowels("leetcode"));
+    }
+
+    public static void sumOfLeftLeaves() {
+        var solution = new Solution();
+        System.out.println(solution.sumOfLeftLeaves(new Solution.TreeNode(3,
+                new Solution.TreeNode(9),
+                new Solution.TreeNode(20,
+                        new Solution.TreeNode(15),
+                        new Solution.TreeNode(7)))));
+        System.out.println(solution.sumOfLeftLeaves(new Solution.TreeNode(1,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(4),
+                        new Solution.TreeNode(5)),
+                new Solution.TreeNode(3))));
+        System.out.println(solution.sumOfLeftLeaves(new Solution.TreeNode(0,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(1,
+                                new Solution.TreeNode(5),
+                                new Solution.TreeNode(1)),
+                        null),
+                new Solution.TreeNode(4,
+                        new Solution.TreeNode(3,
+                                null,
+                                new Solution.TreeNode(6)),
+                        new Solution.TreeNode(-1,
+                                null,
+                                new Solution.TreeNode(8))))));
+    }
+
+    public static void longestPalindrome() {
+        var solution = new Solution();
+        System.out.println(solution.longestPalindrome("abccccdd"));
+        System.out.println(solution.longestPalindrome("a"));
+    }
+
+    public static void preorderTraversal() {
+        var solution = new Solution();
+        System.out.println(solution.preorderTraversal(new Solution.TreeNode(1,
+                null,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(3),
+                        null))));
+        System.out.println(solution.preorderTraversal(new Solution.TreeNode(1)));
+    }
+
+    public static void findMaxConsecutiveOnes() {
+        var solution = new Solution();
+        System.out.println(solution.findMaxConsecutiveOnes(new int[] {1, 1, 0, 1, 1, 1}));
+        System.out.println(solution.findMaxConsecutiveOnes(new int[] {1, 0, 1, 1, 0, 1}));
+    }
+
+    public static void findLengthOfLCIS() {
+        var solution = new Solution();
+        System.out.println(solution.findLengthOfLCIS(new int[] {1, 3, 5, 4, 7}));
+        System.out.println(solution.findLengthOfLCIS(new int[] {2, 2, 2, 2, 2}));
+        System.out.println(solution.findLengthOfLCIS(new int[] {1, 3, 5, 4, 2, 3, 4, 5}));
+    }
+
+    public static void removeDuplicatesFromArray() {
+        var solution = new Solution();
+        System.out.println(solution.removeDuplicates(new int[] {1, 1, 2}));
+        System.out.println(solution.removeDuplicates(new int[] {0, 0, 1, 1, 1, 2, 2, 3, 3, 4}));
+    }
+
+    public static void runningSum() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.runningSum(new int[]{1, 2, 3, 4})));
+        System.out.println(Arrays.toString(solution.runningSum(new int[]{1, 1, 1, 1, 1})));
+        System.out.println(Arrays.toString(solution.runningSum(new int[]{3, 1, 2, 10, 1})));
+    }
+
+    public static void intersection() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.intersection(new int[]{1, 2, 2, 1}, new int[]{2, 2})));
+        System.out.println(Arrays.toString(solution.intersection(new int[]{4, 9, 5}, new int[]{9, 4, 9, 8, 4})));
+        System.out.println(Arrays.toString(solution.intersection(new int[]{4, 9, 5}, new int[]{})));
+    }
+
+    public static void searchBST() {
+        var solution = new Solution();
+        System.out.println(solution.searchBST(new Solution.TreeNode(
+                4,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(1),
+                        new Solution.TreeNode(3)),
+                new Solution.TreeNode(7)), 2));
+        System.out.println(solution.searchBST(new Solution.TreeNode(4,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(1),
+                        new Solution.TreeNode(3)),
+                new Solution.TreeNode(7)), 5));
+    }
+
+    public static void getDecimalValue() {
+        var solution = new Solution();
+        System.out.println(solution.getDecimalValue(new Solution.ListNode(1,
+                new Solution.ListNode(0,
+                        new Solution.ListNode(1)))));
+        System.out.println(solution.getDecimalValue(new Solution.ListNode(0)));
+    }
+
+    public static void hammingWeight() {
+        var solution = new Solution();
+        System.out.println(solution.hammingWeight(11));
+        System.out.println(solution.hammingWeight(128));
+        System.out.println(solution.hammingWeight(2147483645));
+    }
+
+    public static void rangeSumBST() {
+        var solution = new Solution();
+        System.out.println(solution.rangeSumBST(new Solution.TreeNode(1,
+                new Solution.TreeNode(-1),
+                new Solution.TreeNode(2)), -1, 1));
+    }
+
+    public static void sortArrayByParity() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.sortArrayByParity(new int[]{3, 1, 2, 4})));
+        System.out.println(Arrays.toString(solution.sortArrayByParity(new int[]{0})));
+    }
+
+    public static void findTarget() {
+        var solution = new Solution();
+        System.out.println(solution.findTarget(new Solution.TreeNode(5,
+                new Solution.TreeNode(3,
+                        new Solution.TreeNode(2),
+                        new Solution.TreeNode(4)),
+                new Solution.TreeNode(6,
+                        null,
+                        new Solution.TreeNode(7))), 9));
+        System.out.println(solution.findTarget(new Solution.TreeNode(5,
+                new Solution.TreeNode(3,
+                        new Solution.TreeNode(2),
+                        new Solution.TreeNode(4)),
+                new Solution.TreeNode(6,
+                        null,
+                        new Solution.TreeNode(7))), 229));
+    }
+
+    public static void averageOfLevels() {
+        var solution = new Solution();
+        System.out.println(solution.averageOfLevels(new Solution.TreeNode(3,
+                new Solution.TreeNode(9),
+                new Solution.TreeNode(20,
+                        new Solution.TreeNode(15),
+                        new Solution.TreeNode(7)))));
+    }
+
+    public static void findDisappearedNumbers() {
+        var solution = new Solution();
+        System.out.println(solution.findDisappearedNumbers(new int[] {4, 3, 2, 7, 8, 2, 3, 1}));
+        System.out.println(solution.findDisappearedNumbers(new int[] {1, 1}));
+    }
+
+    public static void invertTree() {
+        var solution = new Solution();
+        System.out.println(solution.invertTree(new Solution.TreeNode(2,
+                new Solution.TreeNode(1),
+                new Solution.TreeNode(3))));
+    }
+
+    public static void sortedSquares() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.sortedSquares(new int[]{-4, -1, 0, 3, 10})));
+        System.out.println(Arrays.toString(solution.sortedSquares(new int[]{-7, -3, 2, 3, 11})));
+    }
+
+    public static void numJewelsInStones() {
+        var solution = new Solution();
+        System.out.println(solution.numJewelsInStones("aA", "aAAbbbb"));
+        System.out.println(solution.numJewelsInStones("z", "ZZ"));
+    }
+
+    public static void deleteDuplicates() {
+        var solution = new Solution();
+        System.out.println(solution.deleteDuplicates(new Solution.ListNode(1,
+                new Solution.ListNode(1,
+                        new Solution.ListNode(2)))));
+        System.out.println(solution.deleteDuplicates(new Solution.ListNode(1,
+                new Solution.ListNode(1,
+                        new Solution.ListNode(2,
+                                new Solution.ListNode(3,
+                                        new Solution.ListNode(3)))))));
+        System.out.println(solution.deleteDuplicates(new Solution.ListNode(1,
+                new Solution.ListNode(1,
+                        new Solution.ListNode(1)))));
+    }
+
+    public static void firstUniqChar() {
+        var solution = new Solution();
+        System.out.println(solution.firstUniqChar("leetcode"));
+        System.out.println(solution.firstUniqChar("loveleetcode"));
+        System.out.println(solution.firstUniqChar("aabb"));
+    }
+
+    public static void canConstruct() {
+        var solution = new Solution();
+        System.out.println(solution.canConstruct("a", "b"));
+        System.out.println(solution.canConstruct("aa", "ab"));
+        System.out.println(solution.canConstruct("aa", "aab"));
+    }
+
+    public static void fizzBuzz() {
+        var solution = new Solution();
+        System.out.println(solution.fizzBuzz(3));
+        System.out.println(solution.fizzBuzz(5));
+        System.out.println(solution.fizzBuzz(15));
+    }
+
+    public static void detectCapitalUse() {
+        var solution = new Solution();
+        System.out.println(solution.detectCapitalUse("USA"));
+        System.out.println(solution.detectCapitalUse("FlaG"));
+        System.out.println(solution.detectCapitalUse("Code"));
+        System.out.println(solution.detectCapitalUse("falsE"));
+    }
+
+    public static void isHappy() {
+        var solution = new Solution();
+        System.out.println(solution.isHappy(19));
+        System.out.println(solution.isHappy(2));
+    }
+
+    public static void intersect() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.intersect(new int[]{1, 2, 2, 1}, new int[]{2})));
+        System.out.println(Arrays.toString(solution.intersect(new int[]{1, 2, 2, 1}, new int[]{2, 2})));
+        System.out.println(Arrays.toString(solution.intersect(new int[]{4, 9, 5}, new int[]{9, 4, 9, 8, 4})));
+    }
+
+    public static void isSubtree() {
+        var solution = new Solution();
+        System.out.println(solution.isSubtree(
+                new Solution.TreeNode(3,
+                        new Solution.TreeNode(4,
+                                new Solution.TreeNode(1),
+                                new Solution.TreeNode(2)),
+                        new Solution.TreeNode(5)),
+                new Solution.TreeNode(4,
+                        new Solution.TreeNode(1),
+                        new Solution.TreeNode(2))));
     }
 }

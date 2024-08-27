@@ -1,5 +1,6 @@
 package com.leetcode.leetcode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,6 +18,7 @@ import java.util.function.IntSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Solution {
@@ -1838,7 +1840,9 @@ public class Solution {
             }
         }
 
-        return Arrays.toString(stack.toArray(Character[]::new));
+        return String.join("", stack.stream()
+                .map(String::valueOf)
+                .toArray(String[]::new));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2334,7 +2338,7 @@ public class Solution {
     //Output: [2,2]
     public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
         if (root1 == null || root2 == null) {
-            return root1 == null ? root2 : root1;
+            return getTreeNode(root1, root2);
         }
 
         return mergeNodes(root1, root2);
@@ -2347,11 +2351,11 @@ public class Solution {
             root1.right = mergeNodes(root1.right, root2.right);
         }
 
-        if (root1 == null) {
-            return root2;
-        }
+        return getTreeNode(root1, root2);
+    }
 
-        return root1;
+    private TreeNode getTreeNode(TreeNode root1, TreeNode root2) {
+        return root1 == null ? root2 : root1;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2498,5 +2502,1156 @@ public class Solution {
         }
 
         return map;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array of integers arr, return true if and only if it is a valid mountain array.
+    //Recall that arr is a mountain array if and only if:
+    //arr.length >= 3
+    //There exists some i with 0 < i < arr.length - 1 such that:
+    //arr[0] < arr[1] < ... < arr[i - 1] < arr[i]
+    //arr[i] > arr[i + 1] > ... > arr[arr.length - 1]
+    //Example 1:
+    //Input: arr = [2,1]
+    //Output: false
+    //Example 2:
+    //Input: arr = [3,5,5]
+    //Output: false
+    //Example 3:
+    //Input: arr = [0,3,2,1]
+    //Output: true
+    public boolean validMountainArray1(int[] arr) {
+        int arrLength = arr.length;
+        int maxElemPosition = findMaxElemPosition(arr);
+        if (arrLength < 3 || !isPosInAcceptableLimits(maxElemPosition, arrLength)) {
+            return false;
+        }
+
+        var asc = getAscendingArray(arr, maxElemPosition);
+        int max = asc[0];
+        for (int i = 1; i < asc.length; i++) {
+            if (max >= asc[i]) {
+                return false;
+            }
+            max = asc[i];
+        }
+
+        var desc = getDescendingArray(arr, maxElemPosition);
+        int min = desc[0];
+        for (int i = 1; i < desc.length; i++) {
+            if (min <= desc[i]) {
+                return false;
+            }
+            min = desc[i];
+        }
+
+        return true;
+    }
+
+    private int[] getAscendingArray(int[] arr, int maxPos) {
+        int length = maxPos + 1;
+        int[] res = new int[length];
+        System.arraycopy(arr, 0, res, 0, length);
+
+        return res;
+    }
+
+    private int[] getDescendingArray(int[] arr, int maxPos) {
+        int length = arr.length - maxPos;
+        int[] res = new int[length];
+        System.arraycopy(arr, maxPos, res, 0, length);
+
+        return res;
+    }
+
+    private int findMaxElemPosition(int[] arr) {
+        int pos = 0;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > arr[pos]) {
+                pos = i;
+            }
+        }
+
+        return pos;
+    }
+
+    private boolean isPosInAcceptableLimits(int pos, int arrLength) {
+        return 0 < pos && pos < arrLength - 1;
+    }
+
+    public boolean validMountainArray2(int[] arr) {
+        if (arr.length < 3) {
+            return false;
+        }
+
+        int l = 0;
+        while (l + 1 < arr.length - 1 && arr[l] < arr[l + 1]) {
+            l++;
+        }
+
+        int r = arr.length - 1;
+        while (r - 1 > 0 && arr[r] < arr[r - 1]) {
+            r--;
+        }
+
+        return l == r;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given a license key represented as a string s that consists of only alphanumeric characters and dashes.
+    // The string is separated into n + 1 groups by n dashes. You are also given an integer k.
+    //We want to reformat the string s such that each group contains exactly k characters, except for the first group,
+    // which could be shorter than k but still must contain at least one character. Furthermore, there must be a dash
+    // inserted between two groups, and you should convert all lowercase letters to uppercase.
+    //Return the reformatted license key.
+    //Example 1:
+    //Input: s = "5F3Z-2e-9-w", k = 4
+    //Output: "5F3Z-2E9W"
+    //Explanation: The string s has been split into two parts, each part has 4 characters.
+    //Note that the two extra dashes are not needed and can be removed.
+    //Example 2:
+    //Input: s = "2-5g-3-J", k = 2
+    //Output: "2-5G-3J"
+    //Explanation: The string s has been split into three parts, each part has 2 characters except the first part as
+    // it could be shorter as mentioned above.
+    public String licenseKeyFormatting(String s, int k) {
+        Deque<Character> stack = new LinkedList<>();
+        int count = 0;
+        char[] chars = s.toCharArray();
+        reverseCharArray(chars);
+        for (char c : chars) {
+            if (c != '-') {
+                stack.push(Character.toUpperCase(c));
+                count++;
+
+                if (count == k) {
+                    stack.push('-');
+                    count = 0;
+                }
+            }
+        }
+
+        if (!stack.isEmpty() && stack.peek() == '-') {
+            stack.pop();
+        }
+
+        return String.join("", stack.stream()
+                .map(String::valueOf)
+                .toArray(String[]::new));
+    }
+
+    private void reverseCharArray(char[] chars) {
+        for (int i = 0; i < chars.length / 2; i++) {
+            char temp = chars[i];
+            chars[i] = chars[chars.length - 1 - i];
+            chars[chars.length - 1 - i] = temp;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Assume you are an awesome parent and want to give your children some cookies. But, you should give each child
+    // at most one cookie.
+    //Each child i has a greed factor g[i], which is the minimum size of a cookie that the child will be content with;
+    // and each cookie j has a size s[j]. If s[j] >= g[i], we can assign the cookie j to the child i, and the child i
+    // will be content. Your goal is to maximize the number of your content children and output the maximum number.
+    //Example 1:
+    //Input: g = [1,2,3], s = [1,1]
+    //Output: 1
+    //Explanation: You have 3 children and 2 cookies. The greed factors of 3 children are 1, 2, 3.
+    //And even though you have 2 cookies, since their size is both 1, you could only make the child whose greed factor
+    // is 1 content.
+    //You need to output 1.
+    //Example 2:
+    //Input: g = [1,2], s = [1,2,3]
+    //Output: 2
+    //Explanation: You have 2 children and 3 cookies. The greed factors of 2 children are 1, 2.
+    //You have 3 cookies and their sizes are big enough to gratify all of the children,
+    //You need to output 2.
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int i = 0;
+        for (int cookie : s) {
+            if (i < g.length && cookie >= g[i]) {
+                i++;
+            }
+        }
+
+        return i;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given a sorted unique integer array nums.
+    //A range [a,b] is the set of all integers from a to b (inclusive).
+    //Return the smallest sorted list of ranges that cover all the numbers in the array exactly. That is, each element
+    // of nums is covered by exactly one of the ranges, and there is no integer x such that x is in one of the ranges
+    // but not in nums.
+    //Each range [a,b] in the list should be output as:
+    //"a->b" if a != b
+    //"a" if a == b
+    //Example 1:
+    //Input: nums = [0,1,2,4,5,7]
+    //Output: ["0->2","4->5","7"]
+    //Explanation: The ranges are:
+    //[0,2] --> "0->2"
+    //[4,5] --> "4->5"
+    //[7,7] --> "7"
+    //Example 2:
+    //Input: nums = [0,2,3,4,6,8,9]
+    //Output: ["0","2->4","6","8->9"]
+    //Explanation: The ranges are:
+    //[0,0] --> "0"
+    //[2,4] --> "2->4"
+    //[6,6] --> "6"
+    //[8,9] --> "8->9"
+    public List<String> summaryRanges(int[] nums) {
+        int n = nums.length;
+        List<String> ans = new ArrayList<>();
+        if (n == 0) {
+            return ans;
+        }
+
+        int start = 0;
+        for (int end = 1; end <= n; end++) {
+            if (end == n || nums[end] != nums[end - 1] + 1) {
+                if (start == end - 1) {
+                    ans.add(String.valueOf(nums[start]));
+                } else {
+                    ans.add(nums[start] + "->" + nums[end - 1]);
+                }
+                start = end;
+            }
+        }
+
+        return ans;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //There are n kids with candies. You are given an integer array candies, where each candies[i] represents the
+    // number of candies the ith kid has, and an integer extraCandies, denoting the number of extra candies that you
+    // have.
+    //Return a boolean array result of length n, where result[i] is true if, after giving the ith kid all the
+    // extraCandies, they will have the greatest number of candies among all the kids, or false otherwise.
+    //Note that multiple kids can have the greatest number of candies.
+    //Example 1:
+    //Input: candies = [2,3,5,1,3], extraCandies = 3
+    //Output: [true,true,true,false,true]
+    //Explanation: If you give all extraCandies to:
+    //- Kid 1, they will have 2 + 3 = 5 candies, which is the greatest among the kids.
+    //- Kid 2, they will have 3 + 3 = 6 candies, which is the greatest among the kids.
+    //- Kid 3, they will have 5 + 3 = 8 candies, which is the greatest among the kids.
+    //- Kid 4, they will have 1 + 3 = 4 candies, which is not the greatest among the kids.
+    //- Kid 5, they will have 3 + 3 = 6 candies, which is the greatest among the kids.
+    //Example 2:
+    //Input: candies = [4,2,1,1,2], extraCandies = 1
+    //Output: [true,false,false,false,false]
+    //Explanation: There is only 1 extra candy.
+    //Kid 1 will always have the greatest number of candies, even if a different kid is given the extra candy.
+    //Example 3:
+    //Input: candies = [12,1,12], extraCandies = 10
+    //Output: [true,false,true]
+    public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
+        List<Boolean> result = new ArrayList<>();
+        for (int i : candies) {
+            boolean flag = true;
+            for (int j : candies) {
+                if (i + extraCandies < j) {
+                    flag = false;
+                    break;
+                }
+            }
+            result.add(flag);
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s, reverse only all the vowels in the string and return it.
+    //The vowels are 'a', 'e', 'i', 'o', and 'u', and they can appear in both lower and upper cases, more than once.
+    //Example 1:
+    //Input: s = "hello"
+    //Output: "holle"
+    //Example 2:
+    //Input: s = "leetcode"
+    //Output: "leotcede"
+    public String reverseVowels(String s) {
+        int start = 0;
+        int end = s.length() - 1;
+        char[] chars = s.toCharArray();
+        while (start < end) {
+            char first = s.charAt(start);
+            char second = s.charAt(end);
+            if (!isVowel(first)) {
+                start++;
+            } else if (!isVowel(second)) {
+                end--;
+            } else {
+                swapCharsInArray(chars, start, end);
+                start++;
+                end--;
+            }
+        }
+
+        return String.valueOf(chars);
+    }
+
+    private boolean isVowel(char c) {
+        Set<Character> vowels = Set.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U');
+        return vowels.contains(c);
+    }
+
+    private void swapCharsInArray(char[] chars, int i, int j) {
+        char temp = chars[i];
+        chars[i] = chars[j];
+        chars[j] = temp;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return the sum of all left leaves.
+    //A leaf is a node with no children. A left leaf is a leaf that is the left child of another node.
+    //Example 1:
+    //Input: root = [3,9,20,null,null,15,7]
+    //Output: 24
+    //Explanation: There are two left leaves in the binary tree, with values 9 and 15 respectively.
+    //Example 2:
+    //Input: root = [1]
+    //Output: 0
+    public int sumOfLeftLeaves(TreeNode root) {
+        int ans = 0;
+        Deque<Map<TreeNode, Boolean>> stack = new ArrayDeque<>();
+        stack.add(Map.of(root, false));
+        while (!stack.isEmpty()) {
+            Map<TreeNode, Boolean> map = stack.poll();
+            TreeNode current = map.entrySet().iterator().next().getKey();
+            boolean isLeft = map.get(current);
+            if (current.right == null && current.left == null && isLeft) {
+                ans += current.val;
+            }
+
+            if (current.left != null) {
+                stack.add(Map.of(current.left, true));
+            }
+
+            if (current.right != null) {
+                stack.add(Map.of(current.right, false));
+            }
+        }
+
+        return ans;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s which consists of lowercase or uppercase letters, return the length of the longest
+    //palindrome that can be built with those letters.
+    //Letters are case sensitive, for example, "Aa" is not considered a palindrome.
+    //Example 1:
+    //Input: s = "abccccdd"
+    //Output: 7
+    //Explanation: One longest palindrome that can be built is "dccaccd", whose length is 7.
+    //Example 2:
+    //Input: s = "a"
+    //Output: 1
+    //Explanation: The longest palindrome that can be built is "a", whose length is 1.
+    public int longestPalindrome(String s) {
+        Map<Character, Integer> map = getCharMapFromString(s);
+        int result = 0;
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            var value = entry.getValue();
+            int current = value - (value % 2);
+            result += current;
+            map.put(entry.getKey(), value - current);
+        }
+
+        return map.values().stream().noneMatch(i -> i > 0) ? result : result + 1;
+    }
+
+    private Map<Character, Integer> getCharMapFromString(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (Character c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        return map;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return the preorder traversal of its nodes' values.
+    //Example 1:
+    //Input: root = [1,null,2,3]
+    //Output: [1,2,3]
+    //Example 2:
+    //Input: root = []
+    //Output: []
+    //Example 3:
+    //Input: root = [1]
+    //Output: [1]
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> ans = new LinkedList<>();
+        if (root == null) {
+            return ans;
+        }
+
+        ans.add(root.val);
+        if (root.left != null) {
+            ans.addAll(preorderTraversal(root.left));
+        }
+
+        if (root.right != null) {
+            ans.addAll(preorderTraversal(root.right));
+        }
+
+        return ans;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a binary array nums, return the maximum number of consecutive 1's in the array.
+    //Example 1:
+    //Input: nums = [1,1,0,1,1,1]
+    //Output: 3
+    //Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of
+    //consecutive 1s is 3.
+    //Example 2:
+    //Input: nums = [1,0,1,1,0,1]
+    //Output: 2
+    public int findMaxConsecutiveOnes(int[] nums) {
+        var target = 1;
+        var count = 0;
+        var max = 0;
+        for (int num : nums) {
+            if (num == target) {
+                count++;
+            } else {
+                max = Math.max(max, count);
+                count = 0;
+            }
+        }
+
+        return Math.max(max, count);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an unsorted array of integers nums, return the length of the longest continuous increasing subsequence
+    // (i.e. subarray). The subsequence must be strictly increasing.
+    //A continuous increasing subsequence is defined by two indices l and r (l < r) such that it is [nums[l],
+    // nums[l + 1], ..., nums[r - 1], nums[r]] and for each l <= i < r, nums[i] < nums[i + 1].
+    //Example 1:
+    //Input: nums = [1,3,5,4,7]
+    //Output: 3
+    //Explanation: The longest continuous increasing subsequence is [1,3,5] with length 3.
+    //Even though [1,3,5,7] is an increasing subsequence, it is not continuous as elements 5 and 7 are separated
+    // by element 4.
+    //Example 2:
+    //Input: nums = [2,2,2,2,2]
+    //Output: 1
+    //Explanation: The longest continuous increasing subsequence is [2] with length 1. Note that it must be strictly
+    //increasing.
+    public int findLengthOfLCIS(int[] nums) {
+        var max = 1;
+        var count = 1;
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (nums[i] < nums[i + 1]) {
+                count++;
+            } else {
+                max = Math.max(max, count);
+                count = 1;
+            }
+        }
+
+        return Math.max(max, count);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique
+    // element appears only once. The relative order of the elements should be kept the same. Then return the number
+    // of unique elements in nums.
+    //Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:
+    //Change the array nums such that the first k elements of nums contain the unique elements in the order they were
+    // present in nums initially. The remaining elements of nums are not important as well as the size of nums.
+    //Return k.
+    //Custom Judge:
+    //The judge will test your solution with the following code:
+    //int[] nums = [...]; // Input array
+    //int[] expectedNums = [...]; // The expected answer with correct length
+    //int k = removeDuplicates(nums); // Calls your implementation
+    //assert k == expectedNums.length;
+    //for (int i = 0; i < k; i++) {
+    //    assert nums[i] == expectedNums[i];
+    //}
+    //If all assertions pass, then your solution will be accepted.
+    //Example 1:
+    //Input: nums = [1,1,2]
+    //Output: 2, nums = [1,2,_]
+    //Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
+    //It does not matter what you leave beyond the returned k (hence they are underscores).
+    //Example 2:
+    //Input: nums = [0,0,1,1,1,2,2,3,3,4]
+    //Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+    //Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3,
+    // and 4 respectively.
+    //It does not matter what you leave beyond the returned k (hence they are underscores).
+    public int removeDuplicates(int[] nums) {
+        int[] distinct = Arrays.stream(nums).distinct().toArray();
+        System.arraycopy(distinct, 0, nums, 0, distinct.length);
+        return distinct.length;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array nums. We define a running sum of an array as runningSum[i] = sum(nums[0]…nums[i]).
+    //Return the running sum of nums.
+    //Example 1:
+    //Input: nums = [1,2,3,4]
+    //Output: [1,3,6,10]
+    //Explanation: Running sum is obtained as follows: [1, 1+2, 1+2+3, 1+2+3+4].
+    //Example 2:
+    //Input: nums = [1,1,1,1,1]
+    //Output: [1,2,3,4,5]
+    //Explanation: Running sum is obtained as follows: [1, 1+1, 1+1+1, 1+1+1+1, 1+1+1+1+1].
+    //Example 3:
+    //Input: nums = [3,1,2,10,1]
+    //Output: [3,4,6,16,17]
+    public int[] runningSum(int[] nums) {
+        int sum = nums[0];
+        int[] result = new int[nums.length];
+        result[0] = sum;
+        for (int i = 1; i < nums.length; i++) {
+            sum += nums[i];
+            result[i] = sum;
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given two integer arrays nums1 and nums2, return an array of their
+    //intersection. Each element in the result must be unique and you may return the result in any order.
+    //Example 1:
+    //Input: nums1 = [1,2,2,1], nums2 = [2,2]
+    //Output: [2]
+    //Example 2:
+    //Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+    //Output: [9,4]
+    //Explanation: [4,9] is also accepted.
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> set1 = Arrays.stream(nums1).boxed().collect(Collectors.toSet());
+        Set<Integer> set2 = Arrays.stream(nums2).boxed().collect(Collectors.toSet());
+        set1.retainAll(set2);
+        return set1.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given the root of a binary search tree (BST) and an integer val.
+    //Find the node in the BST that the node's value equals val and return the subtree rooted with that node. If
+    // such a node does not exist, return null.
+    //Example 1:
+    //Input: root = [4,2,7,1,3], val = 2
+    //Output: [2,1,3]
+    //Example 2:
+    //Input: root = [4,2,7,1,3], val = 5
+    //Output: []
+    public TreeNode searchBST(TreeNode root, int val) {
+        if (root == null) {
+            return null;
+        }
+
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node.val == val) {
+                return node;
+            }
+
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+        }
+
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given head which is a reference node to a singly-linked list. The value of each node in the linked list is either
+    // 0 or 1. The linked list holds the binary representation of a number.
+    //Return the decimal value of the number in the linked list.
+    //The most significant bit is at the head of the linked list.
+    //Example 1:
+    //Input: head = [1,0,1]
+    //Output: 5
+    //Explanation: (101) in base 2 = (5) in base 10
+    //Example 2:
+    //Input: head = [0]
+    //Output: 0
+    public int getDecimalValue(ListNode head) {
+        var sb = new StringBuilder();
+        while (head != null) {
+            sb.append(head.val);
+            head = head.next;
+        }
+
+        return Integer.parseInt(sb.toString(), 2);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Write a function that takes the binary representation of a positive integer and returns the number of set bits
+    // it has (also known as the Hamming weight).
+    //Example 1:
+    //Input: n = 11
+    //Output: 3
+    //Explanation:
+    //The input binary string 1011 has a total of three set bits.
+    //Example 2:
+    //Input: n = 128
+    //Output: 1
+    //Explanation:
+    //The input binary string 10000000 has a total of one set bit.
+    //Example 3:
+    //Input: n = 2147483645
+    //Output: 30
+    //Explanation:
+    //The input binary string 1111111111111111111111111111101 has a total of thirty set bits.
+    public int hammingWeight(int n) {
+        return (int) Integer.toBinaryString(n)
+                .chars()
+                .filter(ch -> ch == '1')
+                .count();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root node of a binary search tree and two integers low and high, return the sum of values of all nodes
+    // with a value in the inclusive range [low, high].
+    //Example 1:
+    //Input: root = [10,5,15,3,7,null,18], low = 7, high = 15
+    //Output: 32
+    //Explanation: Nodes 7, 10, and 15 are in the range [7, 15]. 7 + 10 + 15 = 32.
+    //Example 2:
+    //Input: root = [10,5,15,3,7,13,18,1,null,6], low = 6, high = 10
+    //Output: 23
+    //Explanation: Nodes 6, 7, and 10 are in the range [6, 10]. 6 + 7 + 10 = 23.
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        if (root == null) {
+            return 0;
+        }
+
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        int count = 0;
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (low <= node.val && node.val <= high) {
+                count += node.val;
+            }
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+
+        return count;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd
+    // integers.
+    //Return any array that satisfies this condition.
+    //Example 1:
+    //Input: nums = [3,1,2,4]
+    //Output: [2,4,3,1]
+    //Explanation: The outputs [4,2,3,1], [2,4,1,3], and [4,2,1,3] would also be accepted.
+    //Example 2:
+    //Input: nums = [0]
+    //Output: [0]
+    public int[] sortArrayByParity(int[] nums) {
+        return Arrays.stream(nums)
+                .boxed()
+                .sorted(new OddNumbersComparator())
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+
+    private static class OddNumbersComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer integer, Integer t1) {
+            if (integer % 2 != 0 && t1 % 2 == 0) {
+                return 1;
+            } else if (integer % 2 == 0 && t1 % 2 != 0) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary search tree and an integer k, return true if there exist two elements in the BST such
+    // that their sum is equal to k, or false otherwise.
+    //Example 1:
+    //Input: root = [5,3,6,2,4,null,7], k = 9
+    //Output: true
+    //Example 2:
+    //Input: root = [5,3,6,2,4,null,7], k = 28
+    //Output: false
+    public boolean findTarget(TreeNode root, int k) {
+        if (root == null) {
+            return false;
+        }
+
+        Set<Integer> hash = new HashSet<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (hash.contains(k - node.val)) {
+                return true;
+            }
+
+            hash.add(node.val);
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, return the average value of the nodes on each level in the form of an array.
+    // Answers within 10-5 of the actual answer will be accepted.
+    //Example 1:
+    //Input: root = [3,9,20,null,null,15,7]
+    //Output: [3.00000,14.50000,11.00000]
+    //Explanation: The average value of nodes on level 0 is 3, on level 1 is 14.5, and on level 2 is 11.
+    //Hence return [3, 14.5, 11].
+    //Example 2:
+    //Input: root = [3,9,20,15,7]
+    //Output: [3.00000,14.50000,11.00000]
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            double sum = 0.0;
+            int count = 0;
+            int length = queue.size();
+            for (int i = 0; i < length; i++) {
+                TreeNode node = queue.poll();
+                sum += node.val;
+                count++;
+
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+
+            result.add(sum / count);
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in
+    // the range [1, n] that do not appear in nums.
+    //Example 1:
+    //Input: nums = [4,3,2,7,8,2,3,1]
+    //Output: [5,6]
+    //Example 2:
+    //Input: nums = [1,1]
+    //Output: [2]
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        Set<Integer> set = IntStream.range(1, nums.length + 1).boxed().collect(Collectors.toSet());
+        for (int num : nums) {
+            set.remove(num);
+        }
+
+        return set.stream().toList();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary tree, invert the tree, and return its root.
+    //Example 1:
+    //Input: root = [4,2,7,1,3,6,9]
+    //Output: [4,7,2,9,6,3,1]
+    //Example 2:
+    //Input: root = [2,1,3]
+    //Output: [2,3,1]
+    //Example 3:
+    //Input: root = []
+    //Output: []
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted
+    // in non-decreasing order.
+    //Example 1:
+    //Input: nums = [-4,-1,0,3,10]
+    //Output: [0,1,9,16,100]
+    //Explanation: After squaring, the array becomes [16,1,0,9,100].
+    //After sorting, it becomes [0,1,9,16,100].
+    //Example 2:
+    //Input: nums = [-7,-3,2,3,11]
+    //Output: [4,9,9,49,121]
+    public int[] sortedSquares(int[] nums) {
+        int[] array = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            array[i] = nums[i] * nums[i];
+        }
+
+        Arrays.sort(array);
+        return array;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You're given strings jewels representing the types of stones that are jewels, and stones representing the stones
+    // you have. Each character in stones is a type of stone you have. You want to know how many of the stones you have
+    // are also jewels.
+    //Letters are case sensitive, so "a" is considered a different type of stone from "A".
+    //Example 1:
+    //Input: jewels = "aA", stones = "aAAbbbb"
+    //Output: 3
+    //Example 2:
+    //Input: jewels = "z", stones = "ZZ"
+    //Output: 0
+    public int numJewelsInStones(String jewels, String stones) {
+        Set<Character> jewel = jewels.chars().mapToObj(ch -> (char) ch).collect(Collectors.toSet());
+        List<Character> stone = new ArrayList<>(stones.chars().mapToObj(ch -> (char) ch).toList());
+        stone.retainAll(jewel);
+        return stone.size();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return
+    // the linked list sorted as well.
+    //Example 1:
+    //Input: head = [1,1,2]
+    //Output: [1,2]
+    //Example 2:
+    //Input: head = [1,1,2,3,3]
+    //Output: [1,2,3]
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+
+        ListNode current = head;
+        ListNode previous = dummy;
+        while (current != null && current.next != null) {
+            if (current.val == current.next.val) {
+                previous.next = current.next;
+            } else {
+                previous = current;
+            }
+
+            current = current.next;
+        }
+
+        return dummy.next;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s, find the first non-repeating character in it and return its index. If it does not exist,
+    // return -1.
+    //Example 1:
+    //Input: s = "leetcode"
+    //Output: 0
+    //Example 2:
+    //Input: s = "loveleetcode"
+    //Output: 2
+    //Example 3:
+    //Input: s = "aabb"
+    //Output: -1
+    public int firstUniqChar(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (Character c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            if (map.get(s.charAt(i)) == 1) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given two strings ransomNote and magazine, return true if ransomNote can be constructed by using the letters from
+    // magazine and false otherwise.
+    //Each letter in magazine can only be used once in ransomNote.
+    //Example 1:
+    //Input: ransomNote = "a", magazine = "b"
+    //Output: false
+    //Example 2:
+    //Input: ransomNote = "aa", magazine = "ab"
+    //Output: false
+    //Example 3:
+    //Input: ransomNote = "aa", magazine = "aab"
+    //Output: true
+    public boolean canConstruct(String ransomNote, String magazine) {
+        var noteMap = getCountingCharsMap(ransomNote);
+        var magazineMap = getCountingCharsMap(magazine);
+        for (Map.Entry<Character, Integer> entry : noteMap.entrySet()) {
+            Character key = entry.getKey();
+            Integer value = entry.getValue();
+            if (!magazineMap.containsKey(key)) {
+                return false;
+            }
+
+            if (magazineMap.get(key) < value) {
+                return false;
+            } else {
+                magazineMap.put(key, magazineMap.get(key) - value);
+            }
+        }
+
+        return true;
+    }
+
+    private Map<Character, Integer> getCountingCharsMap(String str) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : str.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        return map;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer n, return a string array answer (1-indexed) where:
+    //answer[i] == "FizzBuzz" if i is divisible by 3 and 5.
+    //answer[i] == "Fizz" if i is divisible by 3.
+    //answer[i] == "Buzz" if i is divisible by 5.
+    //answer[i] == i (as a string) if none of the above conditions are true.
+    //Example 1:
+    //Input: n = 3
+    //Output: ["1","2","Fizz"]
+    //Example 2:
+    //Input: n = 5
+    //Output: ["1","2","Fizz","4","Buzz"]
+    //Example 3:
+    //Input: n = 15
+    //Output: ["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]
+    public List<String> fizzBuzz(int n) {
+        List<String> result = new ArrayList<>();
+        for (int i = 1; i < n + 1; i++) {
+            if (i % 3 == 0 && i % 5 == 0) {
+                result.add("FizzBuzz");
+            } else if (i % 3 == 0) {
+                result.add("Fizz");
+            } else if (i % 5 == 0) {
+                result.add("Buzz");
+            } else {
+                result.add(String.valueOf(i));
+            }
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //We define the usage of capitals in a word to be right when one of the following cases holds:
+    //All letters in this word are capitals, like "USA".
+    //All letters in this word are not capitals, like "leetcode".
+    //Only the first letter in this word is capital, like "Google".
+    //Given a string word, return true if the usage of capitals in it is right.
+    //Example 1:
+    //Input: word = "USA"
+    //Output: true
+    //Example 2:
+    //Input: word = "FlaG"
+    //Output: false
+    public boolean detectCapitalUse(String word) {
+        char[] chars = word.toCharArray();
+        boolean firstUpper = Character.isUpperCase(chars[0]);
+        int upperCount = firstUpper ? 1 : 0;
+        for (int i = 1; i < chars.length; i++) {
+            if (Character.isUpperCase(chars[i])) {
+                upperCount++;
+            }
+        }
+
+        return upperCount == chars.length || upperCount == 0 || (upperCount == 1 && firstUpper);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Write an algorithm to determine if a number n is happy.
+    //A happy number is a number defined by the following process:
+    //Starting with any positive integer, replace the number by the sum of the squares of its digits.
+    //Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does
+    // not include 1.
+    //Those numbers for which this process ends in 1 are happy.
+    //Return true if n is a happy number, and false if not.
+    //Example 1:
+    //Input: n = 19
+    //Output: true
+    //Explanation:
+    //12 + 92 = 82
+    //82 + 22 = 68
+    //62 + 82 = 100
+    //12 + 02 + 02 = 1
+    //Example 2:
+    //Input: n = 2
+    //Output: false
+    public boolean isHappy(int n) {
+        int slow = n;
+        int fast = n;
+        do {
+            slow = squareByEveryDigit(slow);
+            fast = squareByEveryDigit(squareByEveryDigit(fast));
+        } while (slow != fast);
+
+        return slow == 1;
+    }
+
+    private int squareByEveryDigit(int num) {
+        int ans = 0;
+        while(num > 0) {
+            int remainder = num % 10;
+            ans += remainder * remainder;
+            num /= 10;
+        }
+
+        return ans;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result
+    // must appear as many times as it shows in both arrays and you may return the result in any order.
+    //Example 1:
+    //Input: nums1 = [1,2,2,1], nums2 = [2,2]
+    //Output: [2,2]
+    //Example 2:
+    //Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+    //Output: [4,9]
+    //Explanation: [9,4] is also accepted.
+    public int[] intersect(int[] nums1, int[] nums2) {
+        List<Integer> list1 = new ArrayList<>(Arrays.stream(nums1).boxed().toList());
+        List<Integer> list2 = new ArrayList<>(Arrays.stream(nums2).boxed().toList());
+        List<Integer> result = new ArrayList<>();
+        if (list1.size() > list2.size()) {
+            fillIntersections(list2, list1, result);
+        } else {
+            fillIntersections(list1, list2, result);
+        }
+
+        return result.stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+
+    private void fillIntersections(List<Integer> iterable, List<Integer> removable, List<Integer> result) {
+        for (Integer number : iterable) {
+            if (removable.contains(number)) {
+                result.add(number);
+                removable.remove(number);
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same
+    // structure and node values of subRoot and false otherwise.
+    //A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node's descendants.
+    // The tree tree could also be considered as a subtree of itself.
+    //Example 1:
+    //Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+    //Output: true
+    //Example 2:
+    //Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
+    //Output: false
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        return subtree(root, subRoot);
+    }
+
+    private boolean subtree(TreeNode root, TreeNode subRoot) {
+        if (root == null) {
+            return false;
+        }
+
+        if (root.val == subRoot.val && isIdentical(root, subRoot)) {
+            return true;
+        }
+
+        return subtree(root.left, subRoot) || subtree(root.right, subRoot);
+    }
+
+    private boolean isIdentical(TreeNode root, TreeNode subRoot) {
+        if (root == null && subRoot == null) {
+            return true;
+        }
+
+        if (root == null || subRoot == null || root.val != subRoot.val) {
+            return false;
+        }
+
+        if (!isIdentical(root.left, subRoot.left)) {
+            return false;
+        }
+
+        return isIdentical(root.right, subRoot.right);
     }
 }
