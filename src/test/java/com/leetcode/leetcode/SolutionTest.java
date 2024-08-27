@@ -213,6 +213,14 @@ public class SolutionTest {
         System.out.println("----------------------------");
         isSubtree();
         System.out.println("----------------------------");
+        isSubstringPresent();
+        System.out.println("----------------------------");
+        minOperations();
+        System.out.println("----------------------------");
+        isPossibleToSplit();
+        System.out.println("----------------------------");
+        countPrefixSuffixPairs();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1117,5 +1125,35 @@ public class SolutionTest {
                 new Solution.TreeNode(4,
                         new Solution.TreeNode(1),
                         new Solution.TreeNode(2))));
+    }
+
+    public static void isSubstringPresent() {
+        var solution = new Solution();
+        System.out.println(solution.isSubstringPresent("leetcode"));
+        System.out.println(solution.isSubstringPresent("abcba"));
+        System.out.println(solution.isSubstringPresent("abcd"));
+        System.out.println(solution.isSubstringPresent("goxo"));
+        System.out.println(solution.isSubstringPresent("ausoee"));
+    }
+
+    public static void minOperations() {
+        var solution = new Solution();
+        System.out.println(solution.minOperations(new int[]{2, 11, 10, 1, 3}, 10));
+        System.out.println(solution.minOperations(new int[]{1, 1, 2, 4, 9}, 1));
+        System.out.println(solution.minOperations(new int[]{1, 1, 2, 4, 9}, 9));
+    }
+
+    public static void isPossibleToSplit() {
+        var solution = new Solution();
+        System.out.println(solution.isPossibleToSplit(new int[] {1, 1, 2, 2, 3, 4}));
+        System.out.println(solution.isPossibleToSplit(new int[] {1, 1, 1, 1}));
+        System.out.println(solution.isPossibleToSplit(new int[] {6, 1, 10, 6, 4, 7, 7, 9, 6, 9}));
+    }
+
+    public static void countPrefixSuffixPairs() {
+        var solution = new Solution();
+        System.out.println(solution.countPrefixSuffixPairs(new String[] {"a", "aba", "ababa", "aa"}));
+        System.out.println(solution.countPrefixSuffixPairs(new String[] {"pa", "papa", "ma", "mama"}));
+        System.out.println(solution.countPrefixSuffixPairs(new String[] {"abab", "ab"}));
     }
 }

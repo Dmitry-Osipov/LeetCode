@@ -3654,4 +3654,151 @@ public class Solution {
 
         return isIdentical(root.right, subRoot.right);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s, find any substring of length 2 which is also present in the reverse of s.
+    //Return true if such a substring exists, and false otherwise.
+    //Example 1:
+    //Input: s = "leetcode"
+    //Output: true
+    //Explanation: Substring "ee" is of length 2 which is also present in reverse(s) == "edocteel".
+    //Example 2:
+    //Input: s = "abcba"
+    //Output: true
+    //Explanation: All of the substrings of length 2 "ab", "bc", "cb", "ba" are also present in reverse(s) == "abcba".
+    //Example 3:
+    //Input: s = "abcd"
+    //Output: false
+    //Explanation: There is no substring of length 2 in s, which is also present in the reverse of s.
+    public boolean isSubstringPresent(String s) {
+        if (s.length() < 2) {
+            return false;
+        }
+
+        String t = new StringBuilder(s).reverse().toString();
+        String temp = s.substring(0, 2);
+        for (int i = 2; i < s.length() + 1; i++) {
+            if (t.contains(temp)) {
+                return true;
+            }
+
+            try {
+                temp = s.substring(i - 1, i + 1);
+            } catch (StringIndexOutOfBoundsException ignore) {}
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given a 0-indexed integer array nums, and an integer k.
+    //In one operation, you can remove one occurrence of the smallest element of nums.
+    //Return the minimum number of operations needed so that all elements of the array are greater than or equal to k.
+    //Example 1:
+    //Input: nums = [2,11,10,1,3], k = 10
+    //Output: 3
+    //Explanation: After one operation, nums becomes equal to [2, 11, 10, 3].
+    //After two operations, nums becomes equal to [11, 10, 3].
+    //After three operations, nums becomes equal to [11, 10].
+    //At this stage, all the elements of nums are greater than or equal to 10 so we can stop.
+    //It can be shown that 3 is the minimum number of operations needed so that all elements of the array are greater
+    // than or equal to 10.
+    //Example 2:
+    //Input: nums = [1,1,2,4,9], k = 1
+    //Output: 0
+    //Explanation: All elements of the array are greater than or equal to 1 so we do not need to apply any operations
+    // on nums.
+    //Example 3:
+    //Input: nums = [1,1,2,4,9], k = 9
+    //Output: 4
+    //Explanation: only a single element of nums is greater than or equal to 9 so we need to apply the operations 4
+    // times on nums.
+    public int minOperations(int[] nums, int k) {
+        int count = 0;
+        for (int num : nums) {
+            if (num < k) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given an integer array nums of even length. You have to split the array into two parts nums1 and nums2
+    // such that:
+    //nums1.length == nums2.length == nums.length / 2.
+    //nums1 should contain distinct elements.
+    //nums2 should also contain distinct elements.
+    //Return true if it is possible to split the array, and false otherwise.
+    //Example 1:
+    //Input: nums = [1,1,2,2,3,4]
+    //Output: true
+    //Explanation: One of the possible ways to split nums is nums1 = [1,2,3] and nums2 = [1,2,4].
+    //Example 2:
+    //Input: nums = [1,1,1,1]
+    //Output: false
+    //Explanation: The only possible way to split nums is nums1 = [1,1] and nums2 = [1,1]. Both nums1 and nums2 do
+    // not contain distinct elements. Therefore, we return false.
+    public boolean isPossibleToSplit(int[] nums) {
+        Map<Integer, Integer> elements = new HashMap<>();
+        for (int num : nums) {
+            elements.put(num, elements.getOrDefault(num, 0) + 1);
+        }
+        return elements.values().stream().allMatch(x -> x < 3);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given a 0-indexed string array words.
+    //Let's define a boolean function isPrefixAndSuffix that takes two strings, str1 and str2:
+    //isPrefixAndSuffix(str1, str2) returns true if str1 is both a prefix and a suffix of str2, and false otherwise.
+    //For example, isPrefixAndSuffix("aba", "ababa") is true because "aba" is a prefix of "ababa" and also a suffix,
+    // but isPrefixAndSuffix("abc", "abcd") is false.
+    //Return an integer denoting the number of index pairs (i, j) such that i < j, and
+    // isPrefixAndSuffix(words[i], words[j]) is true.
+    //Example 1:
+    //Input: words = ["a","aba","ababa","aa"]
+    //Output: 4
+    //Explanation: In this example, the counted index pairs are:
+    //i = 0 and j = 1 because isPrefixAndSuffix("a", "aba") is true.
+    //i = 0 and j = 2 because isPrefixAndSuffix("a", "ababa") is true.
+    //i = 0 and j = 3 because isPrefixAndSuffix("a", "aa") is true.
+    //i = 1 and j = 2 because isPrefixAndSuffix("aba", "ababa") is true.
+    //Therefore, the answer is 4.
+    //Example 2:
+    //Input: words = ["pa","papa","ma","mama"]
+    //Output: 2
+    //Explanation: In this example, the counted index pairs are:
+    //i = 0 and j = 1 because isPrefixAndSuffix("pa", "papa") is true.
+    //i = 2 and j = 3 because isPrefixAndSuffix("ma", "mama") is true.
+    //Therefore, the answer is 2.
+    //Example 3:
+    //Input: words = ["abab","ab"]
+    //Output: 0
+    //Explanation: In this example, the only valid index pair is i = 0 and j = 1, and isPrefixAndSuffix("abab", "ab")
+    // is false. Therefore, the answer is 0.
+    public int countPrefixSuffixPairs(String[] words) {
+        int count = 0;
+        for (int i = 0; i < words.length - 1; i++) {
+            for (int j = i + 1; j < words.length; j++) {
+                if (isPrefixAndSuffix(words[i], words[j])) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private boolean isPrefixAndSuffix(String subString, String string) {
+        if (subString.length() > string.length()) {
+            return false;
+        }
+
+        return string.startsWith(subString) && string.endsWith(subString);
+    }
 }
