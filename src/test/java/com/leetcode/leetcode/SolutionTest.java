@@ -221,6 +221,18 @@ public class SolutionTest {
         System.out.println("----------------------------");
         countPrefixSuffixPairs();
         System.out.println("----------------------------");
+        maxOperations();
+        System.out.println("----------------------------");
+        maxProfit();
+        System.out.println("----------------------------");
+        productExceptSelf();
+        System.out.println("----------------------------");
+        longestPalindromeMedium();
+        System.out.println("----------------------------");
+        isPalindrome();
+        System.out.println("----------------------------");
+        reverseList();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1155,5 +1167,73 @@ public class SolutionTest {
         System.out.println(solution.countPrefixSuffixPairs(new String[] {"a", "aba", "ababa", "aa"}));
         System.out.println(solution.countPrefixSuffixPairs(new String[] {"pa", "papa", "ma", "mama"}));
         System.out.println(solution.countPrefixSuffixPairs(new String[] {"abab", "ab"}));
+    }
+
+    public static void maxOperations() {
+        var solution = new Solution();
+        System.out.println(solution.maxOperations(new int[] {3, 2, 1, 4, 5}));
+        System.out.println(solution.maxOperations(new int[] {3, 2, 6, 1, 4}));
+        System.out.println(solution.maxOperations(new int[] {3, 2}));
+        System.out.println(solution.maxOperations(new int[] {3, 2, 1, 4, 1}));
+        System.out.println(solution.maxOperations(new int[] {1, 1, 1, 1, 1, 1}));
+        System.out.println(solution.maxOperations(new int[] {3, 8, 8}));
+        System.out.println(solution.maxOperations(new int[] {3, 2, 3, 2, 2, 3, 3, 2, 4, 1}));
+    }
+
+    public static void maxProfit() {
+        var solution = new Solution();
+        System.out.println(solution.maxProfit(new int[] {7, 1, 5, 3, 6, 4}));
+        System.out.println(solution.maxProfit(new int[] {7, 6, 4, 3, 1}));
+        System.out.println(solution.maxProfit(new int[] {2, 1}));
+        System.out.println(solution.maxProfit(new int[] {1, 4, 2}));
+        System.out.println(solution.maxProfit(new int[] {3, 2, 6, 5, 0, 3}));
+    }
+
+    public static void productExceptSelf() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.productExceptSelf(new int[]{1, 2, 3, 4})));
+        System.out.println(Arrays.toString(solution.productExceptSelf(new int[]{-1, 1, 0, -3, 3})));
+    }
+
+    public static void longestPalindromeMedium() {
+        var solution = new Solution();
+        System.out.println(solution.longestPalindromeMedium("babad"));
+        System.out.println(solution.longestPalindromeMedium("cbbd"));
+    }
+
+    public static void isPalindrome() {
+        var solution = new Solution();
+        System.out.println(solution.isPalindrome1(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(2,
+                                new Solution.ListNode(1))))));
+        System.out.println(solution.isPalindrome1(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(1)))));
+        System.out.println(solution.isPalindrome1(new Solution.ListNode(1, new Solution.ListNode(2))));
+        System.out.println(solution.isPalindrome1(new Solution.ListNode(1)));
+        System.out.println(solution.isPalindrome1(null));
+        System.out.println("##################################");
+        System.out.println(solution.isPalindrome2(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(2,
+                                new Solution.ListNode(1))))));
+        System.out.println(solution.isPalindrome2(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(1)))));
+        System.out.println(solution.isPalindrome2(new Solution.ListNode(1, new Solution.ListNode(2))));
+        System.out.println(solution.isPalindrome2(new Solution.ListNode(1)));
+        System.out.println(solution.isPalindrome2(null));
+    }
+
+    public static void reverseList() {
+        var solution = new Solution();
+        System.out.println(solution.reverseList(new Solution.ListNode(1,
+                new Solution.ListNode(2,
+                        new Solution.ListNode(3,
+                                new Solution.ListNode(4,
+                                        new Solution.ListNode(5)))))));
+        System.out.println(solution.reverseList(new Solution.ListNode(1, new Solution.ListNode(2))));
+        System.out.println(solution.reverseList(null));
     }
 }

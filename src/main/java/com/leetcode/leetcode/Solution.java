@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
@@ -3800,5 +3801,237 @@ public class Solution {
         }
 
         return string.startsWith(subString) && string.endsWith(subString);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array of integers called nums, you can perform the following operation while nums contains at least
+    // 2 elements:
+    //Choose the first two elements of nums and delete them.
+    //The score of the operation is the sum of the deleted elements.
+    //Your task is to find the maximum number of operations that can be performed, such that all operations have the
+    // same score.
+    //Return the maximum number of operations possible that satisfy the condition mentioned above.
+    //Example 1:
+    //Input: nums = [3,2,1,4,5]
+    //Output: 2
+    //Explanation: We perform the following operations:
+    //- Delete the first two elements, with score 3 + 2 = 5, nums = [1,4,5].
+    //- Delete the first two elements, with score 1 + 4 = 5, nums = [5].
+    //We are unable to perform any more operations as nums contain only 1 element.
+    //Example 2:
+    //Input: nums = [3,2,6,1,4]
+    //Output: 1
+    //Explanation: We perform the following operations:
+    //- Delete the first two elements, with score 3 + 2 = 5, nums = [6,1,4].
+    //We are unable to perform any more operations as the score of the next operation isn't the same as
+    // the previous one.
+    public int maxOperations(int[] nums) {
+        int result = 1;
+        List<Integer> list = new ArrayList<>(Arrays.stream(nums).boxed().toList());
+        int target = list.removeFirst() + list.removeFirst();
+        if (list.size() < 2) {
+            return result;
+        }
+
+        while (list.size() > 1) {
+            if (list.removeFirst() + list.removeFirst() == target) {
+                result++;
+            } else {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given an array prices where prices[i] is the price of a given stock on the ith day.
+    //You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the
+    // future to sell that stock.
+    //Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+    //Example 1:
+    //Input: prices = [7,1,5,3,6,4]
+    //Output: 5
+    //Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+    //Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+    //Example 2:
+    //Input: prices = [7,6,4,3,1]
+    //Output: 0
+    //Explanation: In this case, no transactions are done and the max profit = 0.
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int profit = Integer.MIN_VALUE;
+        for (int price : prices) {
+            minPrice = Math.min(minPrice, price);
+            profit = Math.max(profit, price - minPrice);
+        }
+
+        return profit;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the
+    // elements of nums except nums[i].
+    //The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+    //You must write an algorithm that runs in O(n) time and without using the division operation.
+    //Example 1:
+    //Input: nums = [1,2,3,4]
+    //Output: [24,12,8,6]
+    //Example 2:
+    //Input: nums = [-1,1,0,-3,3]
+    //Output: [0,0,9,0,0]
+    public int[] productExceptSelf(int[] nums) {
+        int length = nums.length;
+        int[] temp1 = new int[length];
+        temp1[0] = 1;
+        for (int i = 1; i < length; i++) {
+            temp1[i] = temp1[i - 1] * nums[i - 1];
+        }
+
+        int[] temp2 = new int[length];
+        temp2[length - 1] = 1;
+        for (int i = length - 2; i >= 0; i--) {
+            temp2[i] = temp2[i + 1] * nums[i + 1];
+        }
+
+        int[] products = new int[length];
+        for (int i = 0; i < length; i++) {
+            products[i] = temp1[i] * temp2[i];
+        }
+        return products;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s, return the longest palindromic substring in s.
+    //Example 1:
+    //Input: s = "babad"
+    //Output: "bab"
+    //Explanation: "aba" is also a valid answer.
+    //Example 2:
+    //Input: s = "cbbd"
+    //Output: "bb"
+    public String longestPalindromeMedium(String s) {
+        if (s.length() <= 1) {
+            return s;
+        }
+
+        int maxLen = 1;
+        String maxStr = s.substring(0, 1);
+
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = i + maxLen; j <= s.length(); j++) {
+                if (j - i > maxLen && isPalindrome(s.substring(i, j))) {
+                    maxLen = j - i;
+                    maxStr = s.substring(i, j);
+                }
+            }
+        }
+
+        return maxStr;
+    }
+
+    private boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+    //Example 1:
+    //Input: head = [1,2,2,1]
+    //Output: true
+    //Example 2:
+    //Input: head = [1,2]
+    //Output: false
+    public boolean isPalindrome1(ListNode head) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        Deque<Integer> stack = new ArrayDeque<>();
+        while (head != null) {
+            queue.add(head.val);
+            stack.push(head.val);
+            head = head.next;
+        }
+
+        for (Integer val : queue) {
+            if (!Objects.equals(val, stack.pop())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isPalindrome2(ListNode head) {
+        if (head == null) {
+            return true;
+        }
+
+        ListNode slow = head, fast = head, previous, temp;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        previous = slow;
+        slow = slow.next;
+        previous.next = null;
+        while (slow != null) {
+            temp = slow.next;
+            slow.next = previous;
+            previous = slow;
+            slow = temp;
+        }
+
+        fast = head;
+        slow = previous;
+        while (slow != null) {
+            if (fast.val != slow.val) {
+                return false;
+            }
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the head of a singly linked list, reverse the list, and return the reversed list.
+    //Example 1:
+    //Input: head = [1,2,3,4,5]
+    //Output: [5,4,3,2,1]
+    //Example 2:
+    //Input: head = [1,2]
+    //Output: [2,1]
+    //Example 3:
+    //Input: head = []
+    //Output: []
+    public ListNode reverseList(ListNode head) {
+        ListNode previous = null;
+        ListNode current = head;
+        while (current != null) {
+            ListNode next = current.next;  // Запоминаем следующий элемент, который потом станет предыдущим
+            current.next = previous;  // Меняем следующий элемент на предыдущий
+            previous = current;  // Меняем предыдущий элемент на текущий (идём вперёд)
+            current = next;  // Меняем текущий элемент на следующий, который запомнили (идём вперёд)
+        }
+
+        return previous;
     }
 }
