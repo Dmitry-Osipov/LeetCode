@@ -233,6 +233,8 @@ public class SolutionTest {
         System.out.println("----------------------------");
         reverseList();
         System.out.println("----------------------------");
+        coinChange();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1235,5 +1237,13 @@ public class SolutionTest {
                                         new Solution.ListNode(5)))))));
         System.out.println(solution.reverseList(new Solution.ListNode(1, new Solution.ListNode(2))));
         System.out.println(solution.reverseList(null));
+    }
+
+    public static void coinChange() {
+        var solution = new Solution();
+        System.out.println(solution.coinChange(new int[] {1, 2, 5}, 11));
+        System.out.println(solution.coinChange(new int[] {2}, 3));
+        System.out.println(solution.coinChange(new int[] {1}, 0));
+        System.out.println(solution.coinChange(new int[] {186, 419, 83, 408}, 6249));
     }
 }
