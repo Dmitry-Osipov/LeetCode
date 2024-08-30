@@ -3,7 +3,6 @@ package com.leetcode.leetcode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
@@ -774,8 +773,8 @@ public class Solution {
         TreeNode node;
         int currentSum;
         while (!nodeStack.isEmpty()) {
-            node = nodeStack.pollLast();
-            currentSum = sumStack.pollLast();
+            node = nodeStack.removeLast();
+            currentSum = sumStack.removeLast();
             if (node.right == null && node.left == null && currentSum == 0) {
                 return true;
             }
@@ -3274,7 +3273,7 @@ public class Solution {
             int count = 0;
             int length = queue.size();
             for (int i = 0; i < length; i++) {
-                TreeNode node = queue.poll();
+                TreeNode node = queue.remove();
                 sum += node.val;
                 count++;
 
@@ -4059,9 +4058,9 @@ public class Solution {
         minCoins[0] = 0;
 
         for (int i = 1; i <= amount; i++) {
-            for (int j = 0; j < coins.length; j++) {
-                if (i - coins[j] >= 0) {
-                    minCoins[i] = Math.min(minCoins[i], 1 + minCoins[i - coins[j]]);
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    minCoins[i] = Math.min(minCoins[i], 1 + minCoins[i - coin]);
                 }
             }
         }
