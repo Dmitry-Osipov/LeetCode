@@ -237,6 +237,8 @@ public class SolutionTest {
         System.out.println("----------------------------");
         BSTIterator();
         System.out.println("----------------------------");
+        getLucky();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1261,5 +1263,12 @@ public class SolutionTest {
                 System.out.println(iterator.next());
             }
         }
+    }
+
+    public static void getLucky() {
+        var solution = new Solution();
+        System.out.println(solution.getLucky("iiii", 36));
+        System.out.println(solution.getLucky("leetcode", 2));
+        System.out.println(solution.getLucky("zbax", 2));
     }
 }
