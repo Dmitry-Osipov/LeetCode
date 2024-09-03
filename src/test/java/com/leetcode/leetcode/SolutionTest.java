@@ -235,6 +235,8 @@ public class SolutionTest {
         System.out.println("----------------------------");
         coinChange();
         System.out.println("----------------------------");
+        BSTIterator();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1245,5 +1247,19 @@ public class SolutionTest {
         System.out.println(solution.coinChange(new int[] {2}, 3));
         System.out.println(solution.coinChange(new int[] {1}, 0));
         System.out.println(solution.coinChange(new int[] {186, 419, 83, 408}, 6249));
+    }
+
+    public static void BSTIterator() {
+        var root = new Solution.TreeNode(7,
+                new Solution.TreeNode(3),
+                new Solution.TreeNode(15,
+                        new Solution.TreeNode(9),
+                        new Solution.TreeNode(20)));
+        var iterator = new Solution.BSTIterator(root);
+        for (int i = 0; i < 6; i++) {
+            if (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
     }
 }
