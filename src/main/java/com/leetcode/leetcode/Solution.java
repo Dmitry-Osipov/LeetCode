@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
@@ -4180,5 +4181,195 @@ public class Solution {
             k--;
         }
         return Integer.parseInt(number.toString());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the heads of two singly linked-lists headA and headB, return the node at which the two lists intersect.
+    //If the two linked lists have no intersection at all, return null.
+    //For example, the following two linked lists begin to intersect at node c1:
+    //The test cases are generated such that there are no cycles anywhere in the entire linked structure.
+    //Note that the linked lists must retain their original structure after the function returns.
+    //Custom Judge:
+    //The inputs to the judge are given as follows (your program is not given these inputs):
+    //intersectVal - The value of the node where the intersection occurs. This is 0 if there is no intersected node.
+    //listA - The first linked list.
+    //listB - The second linked list.
+    //skipA - The number of nodes to skip ahead in listA (starting from the head) to get to the intersected node.
+    //skipB - The number of nodes to skip ahead in listB (starting from the head) to get to the intersected node.
+    //The judge will then create the linked structure based on these inputs and pass the two heads, headA and headB
+    //to your program. If you correctly return the intersected node, then your solution will be accepted.
+    //Example 1:
+    //Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+    //Output: Intersected at '8'
+    //Explanation: The intersected node's value is 8 (note that this must not be 0 if the two lists intersect).
+    //From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,6,1,8,4,5]. There are 2 nodes
+    //before the intersected node in A; There are 3 nodes before the intersected node in B.
+    //- Note that the intersected node's value is not 1 because the nodes with value 1 in A and B (2nd node in A and
+    //3rd node in B) are different node references. In other words, they point to two different locations in memory,
+    //while the nodes with value 8 in A and B (3rd node in A and 4th node in B) point to the same location in memory.
+    //Example 2:
+    //Input: intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+    //Output: Intersected at '2'
+    //Explanation: The intersected node's value is 2 (note that this must not be 0 if the two lists intersect).
+    //From the head of A, it reads as [1,9,1,2,4]. From the head of B, it reads as [3,2,4]. There are 3 nodes before
+    //the intersected node in A; There are 1 node before the intersected node in B.
+    //Example 3:
+    //Input: intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
+    //Output: No intersection
+    //Explanation: From the head of A, it reads as [2,6,4]. From the head of B, it reads as [1,5]. Since the two lists
+    //do not intersect, intersectVal must be 0, while skipA and skipB can be arbitrary values.
+    //Explanation: The two lists do not intersect, so return null.
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode current = headA;
+        Set<ListNode> set = new HashSet<>();
+        while (current != null) {
+            set.add(current);
+            current = current.next;
+        }
+
+        current = headB;
+        while (current != null) {
+            if (set.contains(current)) {
+                return current;
+            }
+
+            current = current.next;
+        }
+
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Reverse bits of a given 32 bits unsigned integer.
+    //
+    //Note:
+    //
+    //Note that in some languages, such as Java, there is no unsigned integer type. In this case, both input and output
+    //will be given as a signed integer type. They should not affect your implementation, as the integer's internal
+    //binary representation is the same, whether it is signed or unsigned.
+    //In Java, the compiler represents the signed integers using 2's complement notation. Therefore, in Example 2
+    //above, the input represents the signed integer -3 and the output represents the signed integer -1073741825.
+    //Example 1:
+    //Input: n = 00000010100101000001111010011100
+    //Output:    964176192 (00111001011110000010100101000000)
+    //Explanation: The input binary string 00000010100101000001111010011100 represents the unsigned integer 43261596,
+    //so return 964176192 which its binary representation is 00111001011110000010100101000000.
+    //Example 2:
+    //Input: n = 11111111111111111111111111111101
+    //Output:   3221225471 (10111111111111111111111111111111)
+    //Explanation: The input binary string 11111111111111111111111111111101 represents the unsigned integer 4294967293,
+    //so return 3221225471 which its binary representation is 10111111111111111111111111111111.
+    public int reverseBits(int n) {
+        n = ((n & 0b11111111111111110000000000000000) >>> 16) | ((n & 0b00000000000000001111111111111111) << 16);
+        n = ((n & 0b11111111000000001111111100000000) >>> 8)  | ((n & 0b00000000111111110000000011111111) << 8);
+        n = ((n & 0b11110000111100001111000011110000) >>> 4)  | ((n & 0b00001111000011110000111100001111) << 4);
+        n = ((n & 0b11001100110011001100110011001100) >>> 2)  | ((n & 0b00110011001100110011001100110011) << 2);
+        n = ((n & 0b10101010101010101010101010101010) >>> 1)  | ((n & 0b01010101010101010101010101010101) << 1);
+        return n;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a complete binary tree, return the number of the nodes in the tree.
+    //According to Wikipedia, every level, except possibly the last, is completely filled in a complete binary tree,
+    //and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the
+    //last level h.
+    public int countNodes(TreeNode root) {
+        var counter = 0;
+        if (root == null) {
+            return counter;
+        }
+
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            counter++;
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+
+        return counter;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the
+    // functions of a normal stack (push, top, pop, and empty).
+    //Implement the MyStack class:
+    //void push(int x) Pushes element x to the top of the stack.
+    //int pop() Removes the element on the top of the stack and returns it.
+    //int top() Returns the element on the top of the stack.
+    //boolean empty() Returns true if the stack is empty, false otherwise.
+    //Notes:
+    //You must use only standard operations of a queue, which means that only push to back, peek/pop from front, size
+    // and is empty operations are valid.
+    //Depending on your language, the queue may not be supported natively. You may simulate a queue using a list or
+    // deque (double-ended queue) as long as you use only a queue's standard operations.
+    //Example 1:
+    //Input
+    //["MyStack", "push", "push", "top", "pop", "empty"]
+    //[[], [1], [2], [], [], []]
+    //Output
+    //[null, null, null, 2, 2, false]
+    //Explanation
+    //MyStack myStack = new MyStack();
+    //myStack.push(1);
+    //myStack.push(2);
+    //myStack.top(); // return 2
+    //myStack.pop(); // return 2
+    //myStack.empty(); // return False
+    public static class MyStack {
+        private StackNode head;
+
+        public void push(int x) {
+            if (empty()) {
+                head = new StackNode(x);
+            } else {
+                var current = new StackNode(x);
+                var ex = head;
+                head = current;
+                current.next = ex;
+            }
+        }
+
+        public int pop() {
+            throwExceptionIfStackIsEmpty();
+            var ex = head;
+            head = head.next;
+            return ex.val;
+        }
+
+        public int top() {
+            throwExceptionIfStackIsEmpty();
+            return head.val;
+        }
+
+        public boolean empty() {
+            return head == null;
+        }
+
+        private void throwExceptionIfStackIsEmpty() {
+            if (empty()) {
+                throw new NoSuchElementException("Stack is empty");
+            }
+        }
+
+        private static class StackNode {
+            int val;
+            StackNode next;
+
+            public StackNode(int val) {
+                this.val = val;
+            }
+        }
     }
 }

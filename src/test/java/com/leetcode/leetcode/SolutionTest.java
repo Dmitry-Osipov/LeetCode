@@ -239,6 +239,14 @@ public class SolutionTest {
         System.out.println("----------------------------");
         getLucky();
         System.out.println("----------------------------");
+        getIntersectionNode();
+        System.out.println("----------------------------");
+        reverseBits();
+        System.out.println("----------------------------");
+        countNodes();
+        System.out.println("----------------------------");
+        checkMyStack();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1270,5 +1278,69 @@ public class SolutionTest {
         System.out.println(solution.getLucky("iiii", 36));
         System.out.println(solution.getLucky("leetcode", 2));
         System.out.println(solution.getLucky("zbax", 2));
+    }
+
+    public static void getIntersectionNode() {
+        var solution = new Solution();
+        Solution.ListNode intersect1 =
+                new Solution.ListNode(2,
+                        new Solution.ListNode(4));
+        Solution.ListNode head1 =
+                new Solution.ListNode(1,
+                        new Solution.ListNode(9,
+                                new Solution.ListNode(1,
+                                        intersect1)));
+        Solution.ListNode head2 =
+                new Solution.ListNode(3,
+                        intersect1);
+        System.out.println(solution.getIntersectionNode(head1, head2));
+
+        Solution.ListNode head3 =
+                new Solution.ListNode(2,
+                        new Solution.ListNode(6,
+                                new Solution.ListNode(4)));
+        Solution.ListNode head4 =
+                new Solution.ListNode(1,
+                        new Solution.ListNode(5));
+        System.out.println(solution.getIntersectionNode(head3, head4));
+
+        Solution.ListNode intersect2 = new Solution.ListNode(8,
+                new Solution.ListNode(4,
+                        new Solution.ListNode(5)));
+        Solution.ListNode head5 =
+                new Solution.ListNode(4,
+                        new Solution.ListNode(1,
+                                intersect2));
+        Solution.ListNode head6 =
+                new Solution.ListNode(5,
+                        new Solution.ListNode(6,
+                                new Solution.ListNode(1,
+                                        intersect2)));
+        System.out.println(solution.getIntersectionNode(head5, head6));
+    }
+
+    public static void reverseBits() {
+        var solution = new Solution();
+        System.out.println(solution.reverseBits(43261596));
+    }
+
+    public static void countNodes() {
+        var solution = new Solution();
+        System.out.println(solution.countNodes(new Solution.TreeNode(1,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(4),
+                        new Solution.TreeNode(5)),
+                new Solution.TreeNode(3,
+                        new Solution.TreeNode(6),
+                        null))));
+    }
+
+    public static void checkMyStack() {
+        var myStack = new Solution.MyStack();
+        myStack.push(1);
+        myStack.push(2);
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+        System.out.println(myStack.empty());
     }
 }
