@@ -4372,4 +4372,496 @@ public class Solution {
             }
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the
+    //functions of a normal queue (push, peek, pop, and empty).
+    //Implement the MyQueue class:
+    //void push(int x) Pushes element x to the back of the queue.
+    //int pop() Removes the element from the front of the queue and returns it.
+    //int peek() Returns the element at the front of the queue.
+    //boolean empty() Returns true if the queue is empty, false otherwise.
+    //Notes:
+    //You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and
+    //is empty operations are valid.
+    //Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or
+    //deque (double-ended queue) as long as you use only a stack's standard operations.
+    //Example 1:
+    //Input
+    //["MyQueue", "push", "push", "peek", "pop", "empty"]
+    //[[], [1], [2], [], [], []]
+    //Output
+    //[null, null, null, 1, 1, false]
+    //Explanation
+    //MyQueue myQueue = new MyQueue();
+    //myQueue.push(1); // queue is: [1]
+    //myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+    //myQueue.peek(); // return 1
+    //myQueue.pop(); // return 1, queue is [2]
+    //myQueue.empty(); // return false
+    public static class MyQueue {
+        private QueueNode head;
+
+        public void push(int x) {
+            if (empty()) {
+                head = new QueueNode(x);
+            } else {
+                var current = head;
+                while (current.next != null) {
+                    current = current.next;
+                }
+
+                current.next = new QueueNode(x);
+            }
+        }
+
+        public int pop() {
+            throwExceptionIfQueueIsEmpty();
+            var ex = head;
+            head = head.next;
+            return ex.val;
+        }
+
+        public int peek() {
+            throwExceptionIfQueueIsEmpty();
+            return head.val;
+        }
+
+        public boolean empty() {
+            return head == null;
+        }
+
+        private void throwExceptionIfQueueIsEmpty() {
+            if (empty()) {
+                throw new NoSuchElementException("Queue is empty");
+            }
+        }
+
+        private static class QueueNode {
+            int val;
+            QueueNode next;
+
+            public QueueNode(int val) {
+                this.val = val;
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5.
+    //Given an integer n, return true if n is an ugly number.
+    //Example 1:
+    //Input: n = 6
+    //Output: true
+    //Explanation: 6 = 2 × 3
+    //Example 2:
+    //Input: n = 1
+    //Output: true
+    //Explanation: 1 has no prime factors, therefore all of its prime factors are limited to 2, 3, and 5.
+    //Example 3:
+    //Input: n = 14
+    //Output: false
+    //Explanation: 14 is not ugly since it includes the prime factor 7.
+    public boolean isUgly(int n) {
+        if (n == 0) {
+            return false;
+        }
+
+        if (n <= 3 && n > 0) {
+            return true;
+        }
+
+        if (n % 2 == 0) {
+            return isUgly(n / 2);
+        }
+
+        if (n % 3 == 0) {
+            return isUgly(n / 3);
+        }
+
+        if (n % 5 == 0) {
+            return isUgly(n / 5);
+        }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a pattern and a string s, find if s follows the same pattern.
+    //Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word
+    //in s. Specifically:
+    //Each letter in pattern maps to exactly one unique word in s.
+    //Each unique word in s maps to exactly one letter in pattern.
+    //No two letters map to the same word, and no two words map to the same letter.
+    //Example 1:
+    //Input: pattern = "abba", s = "dog cat cat dog"
+    //Output: true
+    //Explanation:
+    //The bijection can be established as:
+    //'a' maps to "dog".
+    //'b' maps to "cat".
+    //Example 2:
+    //Input: pattern = "abba", s = "dog cat cat fish"
+    //Output: false
+    //Example 3:
+    //Input: pattern = "aaaa", s = "dog cat cat dog"
+    //Output: false
+    public boolean wordPattern(String pattern, String s) {
+        var words = s.split(" ");
+        var chars = pattern.toCharArray();
+        if (chars.length != words.length) {
+            return false;
+        }
+
+        Map<Character, String> map = new HashMap<>();
+        for (int i = 0; i < chars.length; i++) {
+            String currentValue = map.get(chars[i]);
+            if (currentValue == null) {
+                if (map.containsValue(words[i])) {
+                    return false;
+                } else {
+                    map.put(chars[i], words[i]);
+                }
+            } else if (!Objects.equals(currentValue, words[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer array nums, handle multiple queries of the following type:
+    //Calculate the sum of the elements of nums between indices left and right inclusive where left <= right.
+    //Implement the NumArray class:
+    //NumArray(int[] nums) Initializes the object with the integer array nums.
+    //int sumRange(int left, int right) Returns the sum of the elements of nums between indices left and right
+    //inclusive (i.e. nums[left] + nums[left + 1] + ... + nums[right]).
+    //Example 1:
+    //Input
+    //["NumArray", "sumRange", "sumRange", "sumRange"]
+    //[[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5]]
+    //Output
+    //[null, 1, -1, -3]
+    //Explanation
+    //NumArray numArray = new NumArray([-2, 0, 3, -5, 2, -1]);
+    //numArray.sumRange(0, 2); // return (-2) + 0 + 3 = 1
+    //numArray.sumRange(2, 5); // return 3 + (-5) + 2 + (-1) = -1
+    //numArray.sumRange(0, 5); // return (-2) + 0 + 3 + (-5) + 2 + (-1) = -3
+    public static class NumArray {
+        private final int[] nums;
+
+        public NumArray(int[] nums) {
+            this.nums = Arrays.copyOf(nums, nums.length);
+        }
+
+        public int sumRange(int left, int right) {
+            int count = 0;
+            for (int i = left; i < right + 1; i++) {
+                count += nums[i];
+            }
+
+            return count;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an integer n, return true if it is a power of three. Otherwise, return false.
+    //An integer n is a power of three, if there exists an integer x such that n == 3x.
+    //Example 1:
+    //Input: n = 27
+    //Output: true
+    //Explanation: 27 = 33
+    //Example 2:
+    //Input: n = 0
+    //Output: false
+    //Explanation: There is no x where 3x = 0.
+    //Example 3:
+    //Input: n = -1
+    //Output: false
+    //Explanation: There is no x where 3x = (-1).
+    public boolean isPowerOfThree(int n) {
+        if (n < 1) {
+            return false;
+        }
+
+        return (Math.log10(n) / Math.log10(3)) % 1 == 0;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s, return the number of segments in the string.
+    //A segment is defined to be a contiguous sequence of non-space characters.
+    //Example 1:
+    //Input: s = "Hello, my name is John"
+    //Output: 5
+    //Explanation: The five segments are ["Hello,", "my", "name", "is", "John"]
+    //Example 2:
+    //Input: s = "Hello"
+    //Output: 1
+    public int countSegments(String s) {
+        int count = 0;
+        if (s.isBlank()) {
+            return count;
+        }
+
+        String[] words = s.split("\\s");
+        for (String word : words) {
+            if (!word.isBlank()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You have n coins and you want to build a staircase with these coins. The staircase consists of k rows where the
+    // ith row has exactly i coins. The last row of the staircase may be incomplete.
+    //Given the integer n, return the number of complete rows of the staircase you will build.
+    //Example 1:
+    //Input: n = 5
+    //Output: 2
+    //Explanation: Because the 3rd row is incomplete, we return 2.
+    //Example 2:
+    //Input: n = 8
+    //Output: 3
+    //Explanation: Because the 4th row is incomplete, we return 3.
+    public int arrangeCoins(int n) {
+        int count = 0;
+        for (int i = 1; i <= n; i++) {
+            n -= i;
+            count++;
+
+            if (n < i) {
+                break;
+            }
+        }
+
+        return count;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given an array of strings words, return the words that can be typed using letters of the alphabet on only one
+    //row of American keyboard like the image below.
+    //In the American keyboard:
+    //the first row consists of the characters "qwertyuiop",
+    //the second row consists of the characters "asdfghjkl", and
+    //the third row consists of the characters "zxcvbnm".
+    //Example 1:
+    //Input: words = ["Hello","Alaska","Dad","Peace"]
+    //Output: ["Alaska","Dad"]
+    //Example 2:
+    //Input: words = ["omk"]
+    //Output: []
+    //Example 3:
+    //Input: words = ["adsdf","sfd"]
+    //Output: ["adsdf","sfd"]
+    public String[] findWords(String[] words) {
+        String r1 = "qwertyuiop";
+        String r2 = "asdfghjkl";
+        String r3 = "zxcvbnm";
+        List<String> list = new ArrayList<>();
+
+        for (String word : words) {
+            String[] a = word.toLowerCase().split("");
+            boolean isValid = true;
+            String temp = "";
+            if (r1.contains(a[0])) {
+                temp = r1;
+            } else if (r2.contains(a[0])) {
+                temp = r2;
+            } else if (r3.contains(a[0])) {
+                temp = r3;
+            }
+
+            for (int j = 1; j < a.length; j++) {
+                if (!temp.contains(a[j])) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (isValid) {
+                list.add(word);
+            }
+        }
+
+        return list.toArray(String[]::new);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given the root of a binary search tree (BST) with duplicates, return all the mode(s) (i.e., the most frequently
+    //occurred element) in it.
+    //If the tree has more than one mode, return them in any order.
+    //Assume a BST is defined as follows:
+    //The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+    //The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+    //Both the left and right subtrees must also be binary search trees.
+    //Example 1:
+    //Input: root = [1,null,2,2]
+    //Output: [2]
+    //Example 2:
+    //Input: root = [0]
+    //Output: [0]
+    public int[] findMode(TreeNode root) {
+        if (root == null) {
+            return new int[0];
+        }
+
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        Map<Integer, Integer> repeats = new HashMap<>();
+        int max = 0;
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.remove();
+            int key = node.val;
+            int value = repeats.getOrDefault(key, 0) + 1;
+            repeats.put(key, value);
+            max = Math.max(max, value);
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+
+        List<Integer> maxes = new ArrayList<>();
+        for (var entry : repeats.entrySet()) {
+            if (entry.getValue() == max) {
+                maxes.add(entry.getKey());
+            }
+        }
+
+        return maxes.stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //You are given an integer array score of size n, where score[i] is the score of the ith athlete in a competition.
+    //All the scores are guaranteed to be unique.
+    //The athletes are placed based on their scores, where the 1st place athlete has the highest score, the 2nd place
+    //athlete has the 2nd highest score, and so on. The placement of each athlete determines their rank:
+    //The 1st place athlete's rank is "Gold Medal".
+    //The 2nd place athlete's rank is "Silver Medal".
+    //The 3rd place athlete's rank is "Bronze Medal".
+    //For the 4th place to the nth place athlete, their rank is their placement number (i.e., the xth place athlete's
+    //rank is "x").
+    //Return an array answer of size n where answer[i] is the rank of the ith athlete.
+    //Example 1:
+    //Input: score = [5,4,3,2,1]
+    //Output: ["Gold Medal","Silver Medal","Bronze Medal","4","5"]
+    //Explanation: The placements are [1st, 2nd, 3rd, 4th, 5th].
+    //Example 2:
+    //Input: score = [10,3,8,9,4]
+    //Output: ["Gold Medal","5","Bronze Medal","Silver Medal","4"]
+    //Explanation: The placements are [1st, 5th, 3rd, 2nd, 4th].
+    public String[] findRelativeRanks(int[] score) {
+        var rankMap = prepareRanksMap(score);
+        var ranked = new String[score.length];
+        for (int i = 0; i < score.length; i++) {
+            ranked[i] = rankMap.get(score[i]);
+        }
+
+        return ranked;
+    }
+
+    private Map<Integer, String> prepareRanksMap(int[] count) {
+        var ranked = Arrays.stream(count)
+                .boxed()
+                .sorted()
+                .toList()
+                .reversed();
+        Map<Integer, String> map = new HashMap<>();
+        for (int i = 0; i < ranked.size(); i++) {
+            switch (i) {
+                case 0 ->  map.put(ranked.get(i), "Gold Medal");
+                case 1 -> map.put(ranked.get(i), "Silver Medal");
+                case 2 -> map.put(ranked.get(i), "Bronze Medal");
+                default -> map.put(ranked.get(i), String.valueOf(i + 1));
+            }
+        }
+
+        return map;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //A perfect number is a positive integer that is equal to the sum of its positive divisors, excluding the number
+    //itself. A divisor of an integer x is an integer that can divide x evenly.
+    //Given an integer n, return true if n is a perfect number, otherwise return false.
+    //Example 1:
+    //Input: num = 28
+    //Output: true
+    //Explanation: 28 = 1 + 2 + 4 + 7 + 14
+    //1, 2, 4, 7, and 14 are all divisors of 28.
+    //Example 2:
+    //Input: num = 7
+    //Output: false
+    public boolean checkPerfectNumber(int num) {
+        if (num < 1 || num % 2 != 0) {
+            return false;
+        }
+
+        return getNumberDivisors(num)
+                .stream()
+                .reduce(Integer::sum)
+                .orElse(1) == num;
+    }
+
+    private List<Integer> getNumberDivisors(int number) {
+        List<Integer> divisors = new ArrayList<>();
+        for (int i = 1; i <= number / 2 ; i++) {
+            if (number % i == 0) {
+                divisors.add(i);
+            }
+        }
+
+        return divisors;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //Given a string s and an integer k, reverse the first k characters for every 2k characters counting from the start
+    //of the string.
+    //If there are fewer than k characters left, reverse all of them. If there are less than 2k but greater than or
+    //equal to k characters, then reverse the first k characters and leave the other as original.
+    //Example 1:
+    //Input: s = "abcdefg", k = 2
+    //Output: "bacdfeg"
+    //Example 2:
+    //Input: s = "abcd", k = 2
+    //Output: "bacd"
+    public String reverseStr(String s, int k) {
+        char[] str = s.toCharArray();
+        int n = str.length;
+        for (int i = 0 ; i <= n - 1; i += 2 * k) {
+            reverseK(i, Math.min(i + k - 1, n - 1), str);
+        }
+
+        return new String(str);
+    }
+
+    private void reverseK(int i, int j, char[] str) {
+        while (i < j) {
+            char temp = str[i];
+            str[i] = str[j];
+            str[j] = temp;
+            i++;
+            j--;
+        }
+    }
 }

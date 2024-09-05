@@ -247,6 +247,30 @@ public class SolutionTest {
         System.out.println("----------------------------");
         checkMyStack();
         System.out.println("----------------------------");
+        checkMyQueue();
+        System.out.println("----------------------------");
+        isUgly();
+        System.out.println("----------------------------");
+        wordPattern();
+        System.out.println("----------------------------");
+        checkNumArray();
+        System.out.println("----------------------------");
+        isPowerOfThree();
+        System.out.println("----------------------------");
+        countSegments();
+        System.out.println("----------------------------");
+        arrangeCoins();
+        System.out.println("----------------------------");
+        findWords();
+        System.out.println("----------------------------");
+        findMode();
+        System.out.println("----------------------------");
+        findRelativeRanks();
+        System.out.println("----------------------------");
+        checkPerfectNumber();
+        System.out.println("----------------------------");
+        reverseStr();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1342,5 +1366,92 @@ public class SolutionTest {
         System.out.println(myStack.top());
         System.out.println(myStack.pop());
         System.out.println(myStack.empty());
+    }
+
+    public static void checkMyQueue() {
+        var myQueue = new Solution.MyQueue();
+        myQueue.push(1);
+        myQueue.push(2);
+        System.out.println(myQueue.peek());
+        System.out.println(myQueue.pop());
+        System.out.println(myQueue.empty());
+    }
+
+    public static void isUgly() {
+        var solution = new Solution();
+        System.out.println(solution.isUgly(6));
+        System.out.println(solution.isUgly(1));
+        System.out.println(solution.isUgly(14));
+    }
+
+    public static void wordPattern() {
+        var solution = new Solution();
+        System.out.println(solution.wordPattern("abba", "dog cat cat dog"));
+        System.out.println(solution.wordPattern("abba", "dog cat cat fish"));
+        System.out.println(solution.wordPattern("aaaa", "dog cat cat dog"));
+        System.out.println(solution.wordPattern("abba", "dog dog dog dog"));
+    }
+
+    public static void checkNumArray() {
+        var numArray = new Solution.NumArray(new int[] {-2, 0, 3, -5, 2, -1});
+        System.out.println(numArray.sumRange(0, 2));
+        System.out.println(numArray.sumRange(2, 5));
+        System.out.println(numArray.sumRange(0, 5));
+    }
+
+    public static void isPowerOfThree() {
+        var solution = new Solution();
+        System.out.println(solution.isPowerOfThree(27));
+        System.out.println(solution.isPowerOfThree(0));
+        System.out.println(solution.isPowerOfThree(-1));
+    }
+
+    public static void countSegments() {
+        var solution = new Solution();
+        System.out.println(solution.countSegments("Hello, my name is John"));
+        System.out.println(solution.countSegments("Hello"));
+        System.out.println(solution.countSegments(", , , ,        a, eaefa"));
+    }
+
+    public static void arrangeCoins() {
+        var solution = new Solution();
+        System.out.println(solution.arrangeCoins(5));
+        System.out.println(solution.arrangeCoins(8));
+    }
+
+    public static void findWords() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.findWords(new String[]{"Hello", "Alaska", "Dad", "Peace"})));
+        System.out.println(Arrays.toString(solution.findWords(new String[]{"omk"})));
+        System.out.println(Arrays.toString(solution.findWords(new String[]{"adsdf","sfd"})));
+    }
+
+    public static void findMode() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.findMode(new Solution.TreeNode(1,
+                null,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(2),
+                        null)))));
+        System.out.println(Arrays.toString(solution.findMode(new Solution.TreeNode(0))));
+    }
+
+    public static void findRelativeRanks() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.findRelativeRanks(new int[]{5, 4, 3, 2, 1})));
+        System.out.println(Arrays.toString(solution.findRelativeRanks(new int[]{10, 3, 8, 9, 4})));
+    }
+
+    public static void checkPerfectNumber() {
+        var solution = new Solution();
+        System.out.println(solution.checkPerfectNumber(28));
+        System.out.println(solution.checkPerfectNumber(7));
+    }
+
+    public static void reverseStr() {
+        var solution = new Solution();
+        System.out.println(solution.reverseStr("abcdefg", 2));
+        System.out.println(solution.reverseStr("abcd", 2));
+        System.out.println(solution.reverseStr("abcd", 4));
     }
 }
