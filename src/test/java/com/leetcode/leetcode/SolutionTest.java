@@ -235,6 +235,8 @@ public class SolutionTest {
         System.out.println("----------------------------");
         coinChange();
         System.out.println("----------------------------");
+        arrayRankTransform();
+        System.out.println("----------------------------");
     }
 
     public static void twoSum() {
@@ -1245,5 +1247,12 @@ public class SolutionTest {
         System.out.println(solution.coinChange(new int[] {2}, 3));
         System.out.println(solution.coinChange(new int[] {1}, 0));
         System.out.println(solution.coinChange(new int[] {186, 419, 83, 408}, 6249));
+    }
+
+    public static void arrayRankTransform() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[]{40, 10, 20, 30})));
+        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[]{100, 100, 100})));
+        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[]{37, 12, 28, 9, 100, 56, 80, 5, 12})));
     }
 }
