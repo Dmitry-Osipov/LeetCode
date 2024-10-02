@@ -235,6 +235,42 @@ public class SolutionTest {
         System.out.println("----------------------------");
         coinChange();
         System.out.println("----------------------------");
+        BSTIterator();
+        System.out.println("----------------------------");
+        getLucky();
+        System.out.println("----------------------------");
+        getIntersectionNode();
+        System.out.println("----------------------------");
+        reverseBits();
+        System.out.println("----------------------------");
+        countNodes();
+        System.out.println("----------------------------");
+        checkMyStack();
+        System.out.println("----------------------------");
+        checkMyQueue();
+        System.out.println("----------------------------");
+        isUgly();
+        System.out.println("----------------------------");
+        wordPattern();
+        System.out.println("----------------------------");
+        checkNumArray();
+        System.out.println("----------------------------");
+        isPowerOfThree();
+        System.out.println("----------------------------");
+        countSegments();
+        System.out.println("----------------------------");
+        arrangeCoins();
+        System.out.println("----------------------------");
+        findWords();
+        System.out.println("----------------------------");
+        findMode();
+        System.out.println("----------------------------");
+        findRelativeRanks();
+        System.out.println("----------------------------");
+        checkPerfectNumber();
+        System.out.println("----------------------------");
+        reverseStr();
+        System.out.println("----------------------------");
         arrayRankTransform();
         System.out.println("----------------------------");
     }
@@ -825,7 +861,7 @@ public class SolutionTest {
                         new Solution.TreeNode(1,
                                 null, new Solution.TreeNode(4)),
                         new Solution.TreeNode(3, null, new Solution.TreeNode(7)))
-                ));
+        ));
     }
 
     public static void flipAndInvertImage() {
@@ -1249,10 +1285,182 @@ public class SolutionTest {
         System.out.println(solution.coinChange(new int[] {186, 419, 83, 408}, 6249));
     }
 
+    public static void BSTIterator() {
+        var root = new Solution.TreeNode(7,
+                new Solution.TreeNode(3),
+                new Solution.TreeNode(15,
+                        new Solution.TreeNode(9),
+                        new Solution.TreeNode(20)));
+        var iterator = new Solution.BSTIterator(root);
+        for (int i = 0; i < 6; i++) {
+            if (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+    }
+
+    public static void getLucky() {
+        var solution = new Solution();
+        System.out.println(solution.getLucky("iiii", 36));
+        System.out.println(solution.getLucky("leetcode", 2));
+        System.out.println(solution.getLucky("zbax", 2));
+    }
+
+    public static void getIntersectionNode() {
+        var solution = new Solution();
+        Solution.ListNode intersect1 =
+                new Solution.ListNode(2,
+                        new Solution.ListNode(4));
+        Solution.ListNode head1 =
+                new Solution.ListNode(1,
+                        new Solution.ListNode(9,
+                                new Solution.ListNode(1,
+                                        intersect1)));
+        Solution.ListNode head2 =
+                new Solution.ListNode(3,
+                        intersect1);
+        System.out.println(solution.getIntersectionNode(head1, head2));
+
+        Solution.ListNode head3 =
+                new Solution.ListNode(2,
+                        new Solution.ListNode(6,
+                                new Solution.ListNode(4)));
+        Solution.ListNode head4 =
+                new Solution.ListNode(1,
+                        new Solution.ListNode(5));
+        System.out.println(solution.getIntersectionNode(head3, head4));
+
+        Solution.ListNode intersect2 = new Solution.ListNode(8,
+                new Solution.ListNode(4,
+                        new Solution.ListNode(5)));
+        Solution.ListNode head5 =
+                new Solution.ListNode(4,
+                        new Solution.ListNode(1,
+                                intersect2));
+        Solution.ListNode head6 =
+                new Solution.ListNode(5,
+                        new Solution.ListNode(6,
+                                new Solution.ListNode(1,
+                                        intersect2)));
+        System.out.println(solution.getIntersectionNode(head5, head6));
+    }
+
+    public static void reverseBits() {
+        var solution = new Solution();
+        System.out.println(solution.reverseBits(43261596));
+    }
+
+    public static void countNodes() {
+        var solution = new Solution();
+        System.out.println(solution.countNodes(new Solution.TreeNode(1,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(4),
+                        new Solution.TreeNode(5)),
+                new Solution.TreeNode(3,
+                        new Solution.TreeNode(6),
+                        null))));
+    }
+
+    public static void checkMyStack() {
+        var myStack = new Solution.MyStack();
+        myStack.push(1);
+        myStack.push(2);
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+        System.out.println(myStack.empty());
+    }
+
+    public static void checkMyQueue() {
+        var myQueue = new Solution.MyQueue();
+        myQueue.push(1);
+        myQueue.push(2);
+        System.out.println(myQueue.peek());
+        System.out.println(myQueue.pop());
+        System.out.println(myQueue.empty());
+    }
+
+    public static void isUgly() {
+        var solution = new Solution();
+        System.out.println(solution.isUgly(6));
+        System.out.println(solution.isUgly(1));
+        System.out.println(solution.isUgly(14));
+    }
+
+    public static void wordPattern() {
+        var solution = new Solution();
+        System.out.println(solution.wordPattern("abba", "dog cat cat dog"));
+        System.out.println(solution.wordPattern("abba", "dog cat cat fish"));
+        System.out.println(solution.wordPattern("aaaa", "dog cat cat dog"));
+        System.out.println(solution.wordPattern("abba", "dog dog dog dog"));
+    }
+
+    public static void checkNumArray() {
+        var numArray = new Solution.NumArray(new int[] {-2, 0, 3, -5, 2, -1});
+        System.out.println(numArray.sumRange(0, 2));
+        System.out.println(numArray.sumRange(2, 5));
+        System.out.println(numArray.sumRange(0, 5));
+    }
+
+    public static void isPowerOfThree() {
+        var solution = new Solution();
+        System.out.println(solution.isPowerOfThree(27));
+        System.out.println(solution.isPowerOfThree(0));
+        System.out.println(solution.isPowerOfThree(-1));
+    }
+
+    public static void countSegments() {
+        var solution = new Solution();
+        System.out.println(solution.countSegments("Hello, my name is John"));
+        System.out.println(solution.countSegments("Hello"));
+        System.out.println(solution.countSegments(", , , ,        a, eaefa"));
+    }
+
+    public static void arrangeCoins() {
+        var solution = new Solution();
+        System.out.println(solution.arrangeCoins(5));
+        System.out.println(solution.arrangeCoins(8));
+    }
+
+    public static void findWords() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.findWords(new String[]{"Hello", "Alaska", "Dad", "Peace"})));
+        System.out.println(Arrays.toString(solution.findWords(new String[]{"omk"})));
+        System.out.println(Arrays.toString(solution.findWords(new String[]{"adsdf","sfd"})));
+    }
+
+    public static void findMode() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.findMode(new Solution.TreeNode(1,
+                null,
+                new Solution.TreeNode(2,
+                        new Solution.TreeNode(2),
+                        null)))));
+        System.out.println(Arrays.toString(solution.findMode(new Solution.TreeNode(0))));
+    }
+
+    public static void findRelativeRanks() {
+        var solution = new Solution();
+        System.out.println(Arrays.toString(solution.findRelativeRanks(new int[]{5, 4, 3, 2, 1})));
+        System.out.println(Arrays.toString(solution.findRelativeRanks(new int[]{10, 3, 8, 9, 4})));
+    }
+
+    public static void checkPerfectNumber() {
+        var solution = new Solution();
+        System.out.println(solution.checkPerfectNumber(28));
+        System.out.println(solution.checkPerfectNumber(7));
+    }
+
+    public static void reverseStr() {
+        var solution = new Solution();
+        System.out.println(solution.reverseStr("abcdefg", 2));
+        System.out.println(solution.reverseStr("abcd", 2));
+        System.out.println(solution.reverseStr("abcd", 4));
+    }
+
     public static void arrayRankTransform() {
         var solution = new Solution();
-        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[]{40, 10, 20, 30})));
-        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[]{100, 100, 100})));
-        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[]{37, 12, 28, 9, 100, 56, 80, 5, 12})));
+        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[] {40, 10, 20, 30})));
+        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[] {100, 100, 100})));
+        System.out.println(Arrays.toString(solution.arrayRankTransform(new int[] {37, 12, 28, 9, 100, 56, 80, 5, 12})));
     }
 }
